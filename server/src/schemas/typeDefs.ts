@@ -1,36 +1,46 @@
 const typeDefs = `
-  type Profile {
-    _id: ID
-    name: String
-    email: String
-    password: String
-    skills: [String]!
+  type StorySegment {
+    id: ID!
+    text: String!
+    choices: [Choice!]!
+    ending: Boolean
+  }
+
+  type Choice {
+    text: String!
+    nextSegmentId: ID!
+    effects: Effects
+  }
+
+  type Effects {
+    inventory: JSON
+    stats: JSON
+  }
+
+  type User {
+    id: ID!
+    username: String!
+    email: String!
+    inventory: JSON
+    stats: JSON
   }
 
   type Auth {
-    token: ID!
-    profile: Profile
-  }
-  
-  input ProfileInput {
-    name: String!
-    email: String!
-    password: String!
+    token: String!
+    user: User!
   }
 
+  scalar JSON
+
   type Query {
-    profiles: [Profile]!
-    profile(profileId: ID!): Profile
-    me: Profile
+    getStorySegment(id: ID!): StorySegment
+    me: User
   }
 
   type Mutation {
-    addProfile(input: ProfileInput!): Auth
+    createUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-
-    addSkill(profileId: ID!, skill: String!): Profile
-    removeProfile: Profile
-    removeSkill(skill: String!): Profile
+    choosePath(segmentId: ID!, choiceIndex: Int!): StorySegment
   }
 `;
 
