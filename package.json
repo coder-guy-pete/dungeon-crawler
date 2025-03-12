@@ -1,0 +1,30 @@
+{
+  "name": "dungeon-crawler",
+  "version": "1.0.0",
+  "description": "an interactive story-based game built on the MERN stack.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "start:dev": "concurrently \"cd server && npm run watch\" \"wait-on tcp:3001 && cd client && npm run dev\"",
+    "server": "cd server && npm start",
+    "server:dev": "cd server && npm run dev",
+    "install": "cd server && npm i && cd ../client && npm i",
+    "client:build": "cd client && npm run build",
+    "client:dev": "cd client && npm run dev",
+    "seed": "cd server && npm run seed",
+    "build": "concurrently \"cd server && npm run build\" \"cd client && npm run build\"",
+    "render-build": "npm install && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coder-guy-pete/dungeon-crawler.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/coder-guy-pete/dungeon-crawler/issues"
+  },
+  "homepage": "https://github.com/coder-guy-pete/dungeon-crawler#readme"
+}
