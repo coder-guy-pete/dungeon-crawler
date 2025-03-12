@@ -1,106 +1,118 @@
-import { Profile } from '../models/index.js';
+import mongoose from 'mongoose';
+import { UserInputError } from 'apollo-server-express';
+import { User, StorySegment } from '../models/index.js';
 import { signToken, AuthenticationError } from '../utils/auth.js';
 
-// Describing the shape of the data returned by data passed to the resolvers
-interface Profile {
-  _id: string;
-  name: string;
+interface Choice {
+  text: string;
+  nextSegmentId: mongoose.Types.ObjectId;
+  effects?: {
+    inventory?: { [key: string]: number };
+    stats?: { [key: string]: number };
+  };
+}
+
+interface IStorySegment extends mongoose.Document {
+  text: string;
+  choices: Choice[];
+  ending?: boolean;
+}
+
+interface IUser extends mongoose.Document {
+  username: string;
   email: string;
-  password: string;
-  skills: string[];
+  password?: string;
+  inventory?: { [key: string]: number };
+  stats?: { [key: string]: number };
+  comparePassword(password: string): Promise<boolean>;
 }
 
-interface ProfileArgs {
-  profileId: string;
+interface AuthPayload {
+  token: string;
+  user: IUser;
 }
 
-interface AddProfileArgs {
-  input:{
-    name: string;
-    email: string;
-    password: string;
-  }
-}
-
-interface AddSkillArgs {
-  profileId: string;
-  skill: string;
-}
-
-interface RemoveSkillArgs {
-  profileId: string;
-  skill: string;
-}
-
-interface Context {
-  user?: Profile;
+interface ChoosePathArgs {
+  segmentId: string;
+  choiceIndex: number;
 }
 
 const resolvers = {
-  Query: {
-    profiles: async (): Promise<Profile[]> => {
-      return await Profile.find();
+    Query: {
+      getStorySegment: async (_: any, { id }: { id: string }): Promise<IStorySegment | null> => {
+        return await StorySegment.findById(id);
+      },
+      me: async (_: any, __: any, context: any): Promise<IUser | null> => {
+        if (context.user) {
+          return await User.findById(context.user._id);
+        }
+        throw new AuthenticationError('Not logged in');
+      },
     },
-    profile: async (_parent: any, { profileId }: ProfileArgs): Promise<Profile | null> => {
-      return await Profile.findOne({ _id: profileId });
-    },
-    me: async (_parent: any, _args: any, context: Context): Promise<Profile | null> => {
-      if (context.user) {
-        return await Profile.findOne({ _id: context.user._id });
-      }
-      throw AuthenticationError;
-    },
-  },
-  Mutation: {
-    addProfile: async (_parent: any, { input }: AddProfileArgs): Promise<{ token: string; profile: Profile }> => {
-      const profile = await Profile.create({ ...input });
-      const token = signToken(profile.name, profile.email, profile._id);
-      return { token, profile };
-    },
-    login: async (_parent: any, { email, password }: { email: string; password: string }): Promise<{ token: string; profile: Profile }> => {
-      const profile = await Profile.findOne({ email });
-      if (!profile) {
-        throw AuthenticationError;
-      }
-      const correctPw = await profile.isCorrectPassword(password);
-      if (!correctPw) {
-        throw AuthenticationError;
-      }
-      const token = signToken(profile.name, profile.email, profile._id);
-      return { token, profile };
-    },
-    addSkill: async (_parent: any, { profileId, skill }: AddSkillArgs, context: Context): Promise<Profile | null> => {
-      if (context.user) {
-        return await Profile.findOneAndUpdate(
-          { _id: profileId },
-          {
-            $addToSet: { skills: skill },
-          },
-          {
-            new: true,
-            runValidators: true,
+    Mutation: {
+      createUser: async (_: any, { username, email, password }: any): Promise<AuthPayload> => {
+        const user = await User.create({ username, email, password });
+        const token = signToken(user.username, user.email, user._id);
+        return { token, user };
+      },
+      login: async (_: any, { email, password }: any): Promise<AuthPayload> => {
+        const user = await User.findOne({ email });
+        if (!user) {
+          throw new AuthenticationError('Incorrect credentials');
+        }
+        const correctPw = await user.comparePassword(password);
+        if (!correctPw) {
+          throw new AuthenticationError('Incorrect credentials');
+        }
+        const token = signToken(user.username, user.email, user._id);
+        return { token, user };
+      },
+      choosePath: async (_: any, { segmentId, choiceIndex }: ChoosePathArgs, context: any): Promise<IStorySegment | null> => {
+        if (!context.user) {
+          throw new AuthenticationError('Not logged in');
+        }
+        const currentSegment = await StorySegment.findById(segmentId);
+        if (!currentSegment || !currentSegment.choices[choiceIndex]) {
+          throw new UserInputError('Invalid segment or choice');
+        }
+        const choice = currentSegment.choices[choiceIndex];
+        const nextSegment = await StorySegment.findById(choice.nextSegmentId);
+        if (!nextSegment) {
+          throw new UserInputError('Invalid next segment ID');
+        }
+        if (choice.effects) {
+          const user = await User.findById(context.user._id);
+          if (user) {
+            if (choice.effects.inventory) {
+              for (const item in choice.effects.inventory) {
+                if (user.inventory && user.inventory[item]) {
+                  user.inventory[item] += choice.effects.inventory[item];
+                } else if (user.inventory) {
+                  user.inventory[item] = choice.effects.inventory[item];
+                } else {
+                  user.inventory = {[item]: choice.effects.inventory[item]};
+                }
+              }
+            }
+            if (choice.effects.stats) {
+              for (const stat in choice.effects.stats) {
+                if (user.stats && user.stats[stat]) {
+                  user.stats[stat] += choice.effects.stats[stat];
+                } else if (user.stats) {
+                  user.stats[stat] = choice.effects.stats[stat];
+                } else {
+                  user.stats = {[stat]: choice.effects.stats[stat]};
+                }
+              }
+            }
+  
+            await user.save();
           }
-        );
-      }
-      throw AuthenticationError;
+        }
+  
+        return nextSegment;
+      },
     },
-    removeProfile: async (_parent: any, _args: any, context: Context): Promise<Profile | null> => {
-      if (context.user) {
-        return await Profile.findOneAndDelete({ _id: context.user._id });
-      }
-      throw AuthenticationError;
-    },
-    removeSkill: async (_parent: any, { skill }: RemoveSkillArgs, context: Context): Promise<Profile | null> => {
-      if (context.user) {
-        return await Profile.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { skills: skill } },
-          { new: true }
-        );
-      }
-      throw AuthenticationError;
-    },
-  },
-};
-
-export default resolvers;
+  };
+  
+  export default resolvers;

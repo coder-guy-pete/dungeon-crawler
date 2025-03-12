@@ -1,5 +1,4 @@
-import Profile from './Profile.js';
-import StorySegent from './StorySegent.js';
+import StorySegment from './StorySegment.js';
 import User from './User.js';
 
-export { Profile, User, StorySegent };
+export { User, StorySegment };
