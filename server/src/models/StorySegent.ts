@@ -9,7 +9,7 @@ interface Choice {
     };
 }
 
-interface StorySegmentDocument extends Document {
+interface IStorySegment extends Document {
     text: string;
     choices: Choice[];
     ending?: boolean;
@@ -30,4 +30,4 @@ const storySegmentSchema: Schema = new Schema({
     ending: { type: Boolean, default: false },
 });
 
-export default mongoose.model<StorySegmentDocument>('StorySegment', storySegmentSchema);
+export default mongoose.model<IStorySegment>('StorySegment', storySegmentSchema);
