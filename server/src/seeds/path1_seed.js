@@ -17,6 +17,8 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
     { // Path 1.1: Using the stone to pick the lock
         _id: new mongoose.Types.ObjectId(),
@@ -34,6 +36,8 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
     { // Path 1.1.1: Slowly open the door and sneak out
         _id: new mongoose.Types.ObjectId(),
@@ -51,6 +55,8 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
     { // Path 1.1.1.1: Head towards the light
         _id: new mongoose.Types.ObjectId(),
@@ -68,6 +74,8 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
     { // Path 1.1.1.1.1: Eavesdrop
         _id: new mongoose.Types.ObjectId(),
@@ -85,6 +93,8 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
     { // Path 1.1.1.1.1.1: Steal the key
         _id: new mongoose.Types.ObjectId(),
@@ -102,8 +112,10 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2: Continue down the hallway
         _id: new mongoose.Types.ObjectId(),
         text: "You leave the guard room and move further down the hallway. The light grows stronger. You reach a T intersection, to the right, you hear running water, and to the left, you see a wooden door.",
         choices: [
@@ -119,8 +131,10 @@ const path1Segments = [
             }
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2: Go Left and through the wooden door
         _id: new mongoose.Types.ObjectId(),
         text: "You use the master key to unlock a door. Inside, you find a dimly lit armory. Racks of weapons line the walls. What do you do?",
         choices: [
@@ -141,8 +155,10 @@ const path1Segments = [
             }
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1: Grab a sword
         _id: new mongoose.Types.ObjectId(),
         text: 'You heft the sword. It feels surprisingly well-balanced. With a weapon in hand, you feel more confident. What do you do?',
         choices: [
@@ -158,8 +174,10 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1: Carefully explore the rest of the armory
         _id: new mongoose.Types.ObjectId(),
         text: 'You search the armory thoroughly. You find a leather sheath for your sword and a small pouch containing a few coins. What do you do?',
         choices: [
@@ -175,8 +193,10 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2: Continue searching for more useful items
         _id: new mongoose.Types.ObjectId(),
         text: 'You rummage through the remaining crates and barrels, but find nothing of immediate use. Suddenly, you hear the sound of approaching footsteps. What do you do?',
         choices: [
@@ -192,8 +212,10 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.1: Quickly hide
         _id: new mongoose.Types.ObjectId(),
         text: 'You manage to conceal yourself just as a guard enters the armory. He seems to be checking the inventory. After a moment, he leaves. What do you do?',
         choices: [
@@ -209,8 +231,10 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2: Prepare to fight
         _id: new mongoose.Types.ObjectId(),
         text: 'You take a swing at the guard. He parries your attack effortlessly and draws his own sword. With a menacing grin on his face he takes the stance of a seasoned warrior. What do you do?',
         choices: [
@@ -231,8 +255,10 @@ const path1Segments = [
             }
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.1: Fight!
         _id: new mongoose.Types.ObjectId(),
         text: 'You ready yourself to fight, but it is over before it even began. The guard\'s skill is unmatched. You fall to the ground, defeated. What do you do?',
         choices: [
@@ -248,8 +274,10 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.1.1: Submit to your fate
         _id: new mongoose.Types.ObjectId(),
         text: 'You close your eyes, accepting the inevitable. The guard binds your hands and drags you back to your cell. "You should have stayed where you were," he sneers. You are left alone, bruised and defeated, to await your execution. The end.',
         choices: [
@@ -260,8 +288,10 @@ const path1Segments = [
             },
         ],
         ending: true,
+        win: false,
+        loss: true,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.1.2: Make a final desperate attack
         _id: new mongoose.Types.ObjectId(),
         text: 'With a surge of adrenaline, you lunge at the guard, swinging your sword wildly. He easily sidesteps your attack and delivers a swift merciful blow to your head. You collapse, your vision fading to black. You are dead.',
         choices: [
@@ -272,8 +302,10 @@ const path1Segments = [
             }
         ],
         ending: true,
+        win: false,
+        loss: true,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.2: Flee
         _id: new mongoose.Types.ObjectId(),
         text: 'You turn and sprint down the hallway, but the guard quickly shouts an alarm. Within moments, you hear the heavy footsteps of approaching guards. You are surrounded and dragged back to your cell. Your escape attempt has failed. Game over.',
         choices: [
@@ -284,8 +316,10 @@ const path1Segments = [
             }
         ],
         ending: true,
+        win: false,
+        loss: true,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.2: Disarm the guard
         _id: new mongoose.Types.ObjectId(),
         text: 'You attempt to disarm the guard, but he anticipates your move. He delivers a swift blow to your gut, knocking the wind out of you. You fall to your knees, ready for the worst. The guard laughs menacingly, annoyed that you would even attempt such a move. You notice a sand-like substance on the ground that must have spilled from the barrels you were searching. What do you do?',
         choices: [
@@ -301,8 +335,10 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.2.1: Accept your fate
         _id: new mongoose.Types.ObjectId(),
         text: 'You bow your head, bracing for the final blow. The guard, still chuckling, binds your hands and roughly shoves you back towards your cell. "Learn your place," he snarls. You are left alone, defeated and humiliated, awaiting your execution.',
         choices: [
@@ -313,8 +349,10 @@ const path1Segments = [
             },
         ],
         ending: true,
+        win: false,
+        loss: true,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.2.1: Disarm the guard
         _id: new mongoose.Types.ObjectId(),
         text: 'With a desperate lunge, you scoop up a handful of the sand-like substance and fling it into the guard\'s face. He roars in surprise and pain, momentarily blinded. What do you do?',
         choices: [
@@ -330,8 +368,10 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.2.1.2: Flee using the distraction
         _id: new mongoose.Types.ObjectId(),
         text: 'You use the distraction to make a break for it. The guard, still reeling, is unable to stop you. You sprint down the hallway, heart pounding. But your escape is short-lived. You run straight into a group of guards who have been alerted to your presence. You are quickly overpowered and dragged back to your cell. Game over.',
         choices: [
@@ -342,8 +382,10 @@ const path1Segments = [
             },
         ],
         ending: true,
+        win: false,
+        loss: true,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.2.1.1: Grab the guard's sword and attack
         _id: new mongoose.Types.ObjectId(), 
         text: 'You seize the opportunity, grabbing the guard\'s sword. He stumbles, trying to clear his vision. You swing the sword, and deliver a powerful blow. The guard falls, defeated. What do you do?',
         choices: [
@@ -359,8 +401,10 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.2.1.1.1: Hide the guard's body
         _id: new mongoose.Types.ObjectId(),
         text: 'You attempt to drag the guard\'s body into a nearby alcove, but the task proves more difficult than anticipated. While you are struggling, you hear the sound of approaching guards. They discover you hiding the body. You are swiftly captured and dragged back to your cell. Game over.',
         choices: [
@@ -371,8 +415,10 @@ const path1Segments = [
             },
         ],
         ending: true,
+        win: false,
+        loss: true,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.2.1.1.2: Continue through the hallway
         _id: new mongoose.Types.ObjectId(),
         text: 'You continue through the hallway, navigating the twists and turns. The dead guard\'s body is eventually discovered, but it draws attention away from the direction you\'ve taken. They don\'t suspect you\'ve made it this far. You near what appears to be an exit. What do you do?',
         choices: [
@@ -388,8 +434,10 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.2.1.1.2.1: Approach the exit
         _id: new mongoose.Types.ObjectId(),
         text: 'You slowly creep towards the exit. It appears to be a heavy wooden door. You listen carefully, but hear no sounds. What do you do?',
         choices: [
@@ -405,8 +453,10 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.2.1.1.2.2: Search the immediate area for any signs of danger
         _id: new mongoose.Types.ObjectId(),
         text: 'You carefully examine the area around the exit. You notice a small sewer entrance hidden behind some crates. It might be a tight squeeze, but it could offer an alternate escape route. What do you do?',
         choices: [
@@ -422,8 +472,10 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.2.1.1.2.1.1: Try the door
         _id: new mongoose.Types.ObjectId(),
         text: 'You open the door with your master key, but are face to face with a battalion of guards. This was not the path to your freedom, but rather your doom. You\'re dragged all the way back to your cell to await your execution. Game Over.',
         choices: [
@@ -434,8 +486,10 @@ const path1Segments = [
             },
         ],
         ending: true,
+        win: false,
+        loss: true,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.2.1.1.2.1.1: Try the sewer entrance
         _id: new mongoose.Types.ObjectId(),
         text: 'You carefully examine the area around the exit. You notice a small sewer entrance hidden behind some crates. It might be a tight squeeze, but it could offer an alternate escape route. What do you do?',
         choices: [
@@ -451,8 +505,10 @@ const path1Segments = [
             },
         ],
         ending: false,
+        win: false,
+        loss: false,
     },
-    {
+    { // Path 1.1.1.1.1.1.2.2.1.1.2.2.2.1.1.2.1.1.1: Sewer exit ending
         _id: new mongoose.Types.ObjectId(),
         text: 'It\'s disgusting, and smells more abhorrent than anything you could have possibly imagined. It\'s dark, it\'s cold, and the long tunnel passage seems to go on endlessly. Just when you have given up all hope, and think you might die there in that tunnel, you reach the end of the tunnel. It lets out into a river bank. You are free! far from the reaches of the castle.',
         choices: [
