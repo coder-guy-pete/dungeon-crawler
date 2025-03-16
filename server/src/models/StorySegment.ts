@@ -30,6 +30,8 @@ const storySegmentSchema: Schema = new Schema({
         },
     ],
     ending: { type: Boolean, default: false },
+    win: { type: Boolean, default: false },
+    loss: { type: Boolean, default: false },
 });
 
 export default mongoose.model<IStorySegment>('StorySegment', storySegmentSchema);
