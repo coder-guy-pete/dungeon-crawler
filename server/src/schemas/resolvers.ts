@@ -1,40 +1,43 @@
-import mongoose from 'mongoose';
 import { UserInputError } from 'apollo-server-express';
 import { User, StorySegment } from '../models/index.js';
 import { signToken, AuthenticationError } from '../utils/auth.js';
 
-interface Choice {
+interface ChoiceArgs {
   text: string;
-  nextSegmentId: mongoose.Types.ObjectId;
+  nextSegmentId: string;
   effects?: {
     inventory?: { [key: string]: number };
     stats?: { [key: string]: number };
   };
 }
 
-interface IStorySegment extends mongoose.Document {
+interface StorySegmentArgs {
+  id: string;
   text: string;
-  choices: Choice[];
+  choices: ChoiceArgs[];
   ending?: boolean;
-}
-
-interface IUser extends mongoose.Document {
-  username: string;
-  email: string;
-  password?: string;
-  inventory?: { [key: string]: number };
-  stats?: { [key: string]: number };
-  comparePassword(password: string): Promise<boolean>;
-}
-
-interface AuthPayload {
-  token: string;
-  user: IUser;
 }
 
 interface ChoosePathArgs {
   segmentId: string;
   choiceIndex: number;
+}
+
+interface UserArgs {
+  username: string;
+  email: string;
+  password: string;
+  inventory?: { [key: string]: number };
+  stats?: { [key: string]: number };
+}
+
+interface Auth {
+  token: string;
+  user: typeof User;
+}
+
+interface AuthContext {
+  user?: typeof User;
 }
 
 const resolvers = {
@@ -50,12 +53,12 @@ const resolvers = {
       },
     },
     Mutation: {
-      createUser: async (_: any, { username, email, password }: any): Promise<AuthPayload> => {
+      createUser: async (_: any, { username, email, password }: any) => {
         const user = await User.create({ username, email, password });
         const token = signToken(user.username, user.email, user._id);
         return { token, user };
       },
-      login: async (_: any, { email, password }: any): Promise<AuthPayload> => {
+      login: async (_: any, { email, password }: any): Promise<Auth> => {
         const user = await User.findOne({ email });
         if (!user) {
           throw new AuthenticationError('Incorrect credentials');
