@@ -1,121 +1,87 @@
-import { UserInputError } from 'apollo-server-express';
 import { User, StorySegment } from '../models/index.js';
 import { signToken, AuthenticationError } from '../utils/auth.js';
 
-interface ChoiceArgs {
-  text: string;
-  nextSegmentId: string;
-  effects?: {
-    inventory?: { [key: string]: number };
-    stats?: { [key: string]: number };
-  };
+interface CreateUserArgs {
+  input: {
+    username: string;
+    email: string;
+    password: string;
+  }
 }
 
-interface StorySegmentArgs {
-  id: string;
-  text: string;
-  choices: ChoiceArgs[];
-  ending?: boolean;
-}
-
-interface ChoosePathArgs {
-  segmentId: string;
-  choiceIndex: number;
+interface LoginArgs {
+  email: string;
+  password: string;
 }
 
 interface UserArgs {
-  username: string;
-  email: string;
-  password: string;
-  inventory?: { [key: string]: number };
-  stats?: { [key: string]: number };
-}
-
-interface Auth {
-  token: string;
-  user: typeof User;
-}
-
-interface AuthContext {
-  user?: typeof User;
+  id: string;
 }
 
 const resolvers = {
-    Query: {
-      getStorySegment: async (_: any, { id }: { id: string }): Promise<IStorySegment | null> => {
-        return await StorySegment.findById(id);
-      },
-      me: async (_: any, __: any, context: any): Promise<IUser | null> => {
-        if (context.user) {
-          return await User.findById(context.user._id);
-        }
-        throw new AuthenticationError('Not logged in');
-      },
+  Query: {
+    me: async (_parent: any, _args: any, context: any) => {
+      if (context.user) {
+        return User.findOne({ _id: context.user._id });
+      }
+      throw new AuthenticationError('You need to be logged in!');
     },
-    Mutation: {
-      createUser: async (_: any, { username, email, password }: any) => {
-        const user = await User.create({ username, email, password });
-        const token = signToken(user.username, user.email, user._id);
-        return { token, user };
-      },
-      login: async (_: any, { email, password }: any): Promise<Auth> => {
-        const user = await User.findOne({ email });
-        if (!user) {
-          throw new AuthenticationError('Incorrect credentials');
+    getStorySegment: async (_parent: any, { id }: UserArgs) => {
+      return StorySegment.findById(id);
+    },
+  },
+  Mutation: {
+    createUser: async (_parent: any, { input }: CreateUserArgs) => {
+      const user = await User.create({ ...input });
+      const token = signToken(user.username, user.email, user._id);
+      
+      return { token, user };
+    },
+    login: async (_parent: any, { email, password }: LoginArgs) => {
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        throw new AuthenticationError('Incorrect credentials');
+      }
+
+      const correctPw = await user.comparePassword(password);
+
+      if (!correctPw) {
+        throw new AuthenticationError('Could not authenticate user');
+      }
+
+      const token = signToken(user.username, user.email, user._id);
+
+      return { token, user };
+    },
+    choosePath: async (_parent: any, { segmentId, choiceIndex }: any, context: any) => {
+      if (context.user) {
+        const segment = await StorySegment.findById(segmentId);
+        
+        if (!segment) {
+          throw new Error('Segment not found');
         }
-        const correctPw = await user.comparePassword(password);
-        if (!correctPw) {
-          throw new AuthenticationError('Incorrect credentials');
-        }
-        const token = signToken(user.username, user.email, user._id);
-        return { token, user };
-      },
-      choosePath: async (_: any, { segmentId, choiceIndex }: ChoosePathArgs, context: any): Promise<IStorySegment | null> => {
-        if (!context.user) {
-          throw new AuthenticationError('Not logged in');
-        }
-        const currentSegment = await StorySegment.findById(segmentId);
-        if (!currentSegment || !currentSegment.choices[choiceIndex]) {
-          throw new UserInputError('Invalid segment or choice');
-        }
-        const choice = currentSegment.choices[choiceIndex];
+        const choice = segment.choices[choiceIndex];
         const nextSegment = await StorySegment.findById(choice.nextSegmentId);
-        if (!nextSegment) {
-          throw new UserInputError('Invalid next segment ID');
-        }
+
         if (choice.effects) {
-          const user = await User.findById(context.user._id);
-          if (user) {
-            if (choice.effects.inventory) {
-              for (const item in choice.effects.inventory) {
-                if (user.inventory && user.inventory[item]) {
-                  user.inventory[item] += choice.effects.inventory[item];
-                } else if (user.inventory) {
-                  user.inventory[item] = choice.effects.inventory[item];
-                } else {
-                  user.inventory = {[item]: choice.effects.inventory[item]};
-                }
-              }
+          if (choice.effects.inventory) {
+            for (const [key, value] of Object.entries(choice.effects.inventory)) {
+              context.user.inventory[key] += value;
             }
-            if (choice.effects.stats) {
-              for (const stat in choice.effects.stats) {
-                if (user.stats && user.stats[stat]) {
-                  user.stats[stat] += choice.effects.stats[stat];
-                } else if (user.stats) {
-                  user.stats[stat] = choice.effects.stats[stat];
-                } else {
-                  user.stats = {[stat]: choice.effects.stats[stat]};
-                }
-              }
+          }
+          if (choice.effects.stats) {
+            for (const [key, value] of Object.entries(choice.effects.stats)) {
+              context.user.stats[key] += value;
             }
-  
-            await user.save();
           }
         }
-  
+
         return nextSegment;
-      },
+      }
+      throw new AuthenticationError('You need to be logged in!');
     },
-  };
-  
-  export default resolvers;
+  },
+};
+
+export default resolvers;

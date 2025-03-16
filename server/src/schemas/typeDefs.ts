@@ -25,6 +25,12 @@ const typeDefs = `
     inventory: JSON
     stats: JSON
   }
+  
+  input UserInput {
+    username: String!
+    email: String!
+    password: String!
+  }
 
   type Auth {
     token: String!
@@ -39,7 +45,7 @@ const typeDefs = `
   }
 
   type Mutation {
-    createUser(username: String!, email: String!, password: String!): Auth
+    createUser(input: UserInput!): Auth
     login(email: String!, password: String!): Auth
     choosePath(segmentId: ID!, choiceIndex: Int!): StorySegment
   }
