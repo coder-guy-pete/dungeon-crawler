@@ -22,6 +22,8 @@ const typeDefs = `
     username: String!
     email: String!
     password: String!
+    wins: Int
+    losses: Int
     inventory: JSON
     stats: JSON
   }

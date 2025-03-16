@@ -13,6 +13,8 @@ interface IStorySegment extends Document {
     text: string;
     choices: Choice[];
     ending?: boolean;
+    win?: boolean;
+    loss?: boolean;
 }
 
 const storySegmentSchema: Schema = new Schema({

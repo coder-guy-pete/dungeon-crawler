@@ -5,6 +5,8 @@ interface IUser extends Document {
     username: string;
     email: string;
     password?: string;
+    wins: { type: Number, default: 0 };
+    losses: { type: Number, default: 0 };
     inventory?: { [key: string]: number };
     stats?: { [key: string]: number };
     comparePassword(password: string): Promise<boolean>;
