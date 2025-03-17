@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 interface Choice {
     text: string;
-    nextSegmentId: mongoose.Types.ObjectId;
+    nextSegmentId: number | null;
     effects?: {
         inventory?: { [key: string]: number };
         stats?: { [key: string]: number };
@@ -10,6 +10,7 @@ interface Choice {
 }
 
 interface IStorySegment extends Document {
+    segmentId: number;
     text: string;
     choices: Choice[];
     ending?: boolean;
@@ -18,6 +19,7 @@ interface IStorySegment extends Document {
 }
 
 const storySegmentSchema: Schema = new Schema({
+    segmentId: { type: Number, required: true, unique: true },
     text: { type: String, required: true },
     choices: [
         {
