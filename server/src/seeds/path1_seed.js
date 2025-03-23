@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const path1Segments = [
+export const path1Segments = [
     {
         _id: new mongoose.Types.ObjectId(),
         segmentId: 1,
@@ -213,12 +213,12 @@ const path1Segments = [
         choices: [
             {
                 text: 'Quickly hide behind a rack of weapons.',
-                nextSegmentId: new mongoose.Types.ObjectId(),
+                nextSegmentId: 24,
                 effects: { stats: { Dexterity: 2 } },
             },
             {
                 text: 'Prepare to fight.',
-                nextSegmentId: new mongoose.Types.ObjectId(),
+                nextSegmentId: 25,
                 effects: { stats: { Strength: 1 } },
             },
         ],
@@ -523,7 +523,7 @@ const path1Segments = [
         choices: [
             {
                 text: 'Try the sewer entrance.',
-                nextSegmentId: 43
+                nextSegmentId: 43,
                 effects: { stats: { Dexterity: 2, Luck: 1, HP: -2 } },
             },
             {
@@ -1069,5 +1069,3 @@ const path1Segments = [
         loss: false,
     },
 ];
-
-export default path1Segments;

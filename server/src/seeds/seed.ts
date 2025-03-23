@@ -2,8 +2,35 @@ import mongoose from 'mongoose';
 import { StorySegment } from '../models/index.js';
 import db from '../config/connection.js';
 import dotenv from 'dotenv';
+import { path1Segments } from './path1_seed.js';
 
 dotenv.config();
+
+interface Choice {
+    text: string;
+    nextSegmentId: number | null;
+    effects?: {
+        inventory?: { [key: string]: number };
+        stats?: {
+            HP?: number;
+            Strength?: number;
+            Dexterity?: number;
+            Wisdom?: number;
+            Charm?: number;
+            Luck?: number;
+        };
+    };
+}
+
+interface IStorySegment {
+    _id: mongoose.Types.ObjectId;
+    segmentId: number;
+    text: string;
+    choices: Choice[];
+    ending?: boolean;
+    win?: boolean;
+    loss?: boolean;
+}
 
 const seedDB = async () => {
     try {
@@ -11,7 +38,7 @@ const seedDB = async () => {
 
         await StorySegment.deleteMany({});
 
-        const storySegments = [
+        const baseStorySegment: IStorySegment[] = [
             { // Start
                 _id: new mongoose.Types.ObjectId(),
                 segmentId: 0,
@@ -38,5 +65,15 @@ const seedDB = async () => {
                 loss: false,
             },
         ];
+        const allSegments = baseStorySegment.concat(path1Segments);
+        await StorySegment.insertMany(allSegments);
+
+        console.log('Data imported successfully');
+        process.exit(0);
+    } catch (error) {
+        console.error('Error importing data:', error);
+        process.exit(1);
     }
 };
+
+seedDB();

@@ -5,11 +5,19 @@ interface Choice {
     nextSegmentId: number | null;
     effects?: {
         inventory?: { [key: string]: number };
-        stats?: { [key: string]: number };
+        stats?: {
+            HP?: number;
+            Strength?: number;
+            Dexterity?: number;
+            Wisdom?: number;
+            Charm?: number;
+            Luck?: number;
+        };
     };
 }
 
 interface IStorySegment extends Document {
+    _id: mongoose.Types.ObjectId;
     segmentId: number;
     text: string;
     choices: Choice[];
@@ -19,12 +27,13 @@ interface IStorySegment extends Document {
 }
 
 const storySegmentSchema: Schema = new Schema({
+    _id: { type: Schema.Types.ObjectId, required: true },
     segmentId: { type: Number, required: true, unique: true },
     text: { type: String, required: true },
     choices: [
         {
         text: { type: String, required: true },
-        nextSegmentId: { type: Schema.Types.ObjectId, ref: 'StorySegment', required: true },
+        nextSegmentId: { type: Number, required: true },
         effects: {
             inventory: { type: Schema.Types.Mixed },
             stats: { type: Schema.Types.Mixed },
