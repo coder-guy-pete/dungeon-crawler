@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { type JwtPayload, jwtDecode } from 'jwt-decode';
 
 interface ExtendedJwt extends JwtPayload {
@@ -46,4 +47,30 @@ class AuthService {
     }
 }
 
-export default new AuthService();
+const authService = new AuthService();
+
+export const useAuth = () => {
+    const [loggedIn, setLoggedIn] = useState(authService.loggedIn());
+
+    useEffect(() => {
+        setLoggedIn(authService.loggedIn());
+
+        const handleStorageChange = () => {
+        setLoggedIn(authService.loggedIn());
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+
+        return () => {
+        window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
+
+    return { loggedIn, setLoggedIn };
+};
+
+export const useAuthService = () => {
+    return authService;
+};
+
+export default authService;

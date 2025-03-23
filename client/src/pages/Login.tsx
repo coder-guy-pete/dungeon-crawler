@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../graphql/mutations';
 import { useNavigate } from 'react-router-dom';
+import { useAuthService } from '../utils/auth';
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const [loginUser, { error }] = useMutation(LOGIN_USER);
+    const authService = useAuthService();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
         const { data } = await loginUser({ variables: { email, password } });
-        localStorage.setItem('id_token', data.login.token);
-        navigate('/'); // Redirect to the game page
+        authService.login(data.login.token);
+        navigate('/');
         } catch (err) {
         console.error(err);
         }
