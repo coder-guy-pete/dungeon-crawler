@@ -53,7 +53,7 @@ const typeDefs = `
   type Mutation {
     createUser(input: UserInput!): Auth
     login(email: String!, password: String!): Auth
-    choosePath(segmentId: ID!, choiceIndex: Int!): StorySegment
+    choosePath(segmentId: Int!, choiceIndex: Int!): StorySegment
     resetGame: User
   }
 `;

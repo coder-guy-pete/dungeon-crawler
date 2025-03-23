@@ -13,8 +13,9 @@ const Game: React.FC = () => {
     const [resetGame] = useMutation(RESET_GAME);
 
     useEffect(() => {
-        if (meData && meData.me && meData.me.currentSegmentId) {
-        setSegmentId(meData.me.currentSegmentId);
+        if (meData) {
+            console.log("useEffect Setting segmentId to:", meData.me.currentSegmentId);
+            setSegmentId(meData.me.currentSegmentId);
         }
     }, [meData]);
 
@@ -23,8 +24,13 @@ const Game: React.FC = () => {
 
     const handleChoice = async (choiceIndex: number) => {
         try {
-        const { data: choiceData } = await choosePath({ variables: { segmentId, choiceIndex } });
-        setSegmentId(choiceData.choosePath.segmentId);
+            console.log("handleChoice: Before Mutation - segmentId:", segmentId, "choiceIndex:", choiceIndex);
+
+            const { data: choiceData } = await choosePath({ variables: { segmentId, choiceIndex } });
+
+            console.log("handleChoice: After Mutation - choiceData:", choiceData);
+            
+            setSegmentId(choiceData.choosePath.segmentId);
         } catch (err) {
         console.error(err);
         }
@@ -33,7 +39,7 @@ const Game: React.FC = () => {
     const handleResetGame = async () => {
         try {
         await resetGame();
-        setSegmentId(1);
+        setSegmentId(0);
         } catch (err) {
         console.error(err);
         }
@@ -45,8 +51,10 @@ const Game: React.FC = () => {
         {data?.getStorySegment && (
             <div>
             <p>{data.getStorySegment.text}</p>
-            {data.getStorySegment.choices.map((choice: { text: string }, nextSegmentId: number) => (
-                <button key={nextSegmentId} onClick={() => handleChoice(nextSegmentId)}>
+            {data.getStorySegment.choices.map((choice, index) => (
+                console.log("Choice:", choice),
+                console.log("Index:", index),
+                <button key={index} onClick={() => handleChoice(index)}>
                 {choice.text}
                 </button>
             ))}
