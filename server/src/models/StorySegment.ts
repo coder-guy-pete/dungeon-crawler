@@ -33,7 +33,7 @@ const storySegmentSchema: Schema = new Schema({
     choices: [
         {
         text: { type: String, required: true },
-        nextSegmentId: { type: Number, required: true },
+        nextSegmentId: { type: Number },
         effects: {
             inventory: { type: Schema.Types.Mixed },
             stats: { type: Schema.Types.Mixed },
