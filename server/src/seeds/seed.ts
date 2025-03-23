@@ -4,6 +4,7 @@ import db from '../config/connection.js';
 import dotenv from 'dotenv';
 import { path1Segments } from './path1_seed.js';
 import { path2Segments } from './path2_seed.js';
+import { path3Segments } from './path3_seed.js';
 
 dotenv.config();
 
@@ -66,7 +67,7 @@ const seedDB = async () => {
                 loss: false,
             },
         ];
-        const allSegments = baseStorySegment.concat(path1Segments, path2Segments);
+        const allSegments = baseStorySegment.concat(path1Segments, path2Segments, path3Segments);
         await StorySegment.insertMany(allSegments);
 
         console.log('Data imported successfully');
