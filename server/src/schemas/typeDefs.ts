@@ -28,7 +28,7 @@ const typeDefs = `
     wins: Int
     losses: Int
     inventory: JSON
-    stats: Stats
+    stats: JSON
   }
   
   input UserInput {

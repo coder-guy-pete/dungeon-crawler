@@ -50,7 +50,17 @@ const resolvers = {
   },
   Mutation: {
     createUser: async (_parent: any, { input }: CreateUserArgs) => {
-      const user = await User.create({ ...input });
+      const user = await User.create({ ...input,
+        stats: {
+          HP: 50,
+          Strength: 4,
+          Dexterity: 8,
+          Wisdom: 5,
+          Charm: 6,
+          Luck: 8,
+        },
+      });
+
       const token = signToken(user.username, user.email, user._id);
       
       return { token, user };
@@ -82,30 +92,45 @@ const resolvers = {
         const choice = segment.choices[choiceIndex];
         const nextSegment = await StorySegment.findOne({ segmentId: choice.nextSegmentId });
 
+        let user = await User.findOne({ email: context.user.email });
+
+        if (!user) {
+          throw new Error('User not found');
+        }
+
         if (choice.effects) {
           const { inventory, stats } = choice.effects;
 
           if (inventory) {
             for (const [key, value] of Object.entries(inventory)) {
-              if (context.user.inventory) {
-                context.user.inventory[key] = (context.user.inventory[key] || 0) + value;
+              if (user.inventory && user.inventory[key]) {
+                user.inventory[key] += value;
               } else {
-                context.user.inventory = { [key]: value };
+                if (user.inventory) {
+                  user.inventory[key] = value;
+                } else {
+                  user.inventory = { [key]: value };
+                }
               }
             }
           }
 
           if (stats) {
             for (const [key, value] of Object.entries(stats)) {
-              if (context.user.stats) {
-                context.user.stats[key] = (context.user.stats[key] || 0) + value;
+              if (user.stats && user.stats[key]) {
+                user.stats[key] += value;
               } else {
-                context.user.stats = { [key]: value };
+                if (user.stats) {
+                  user.stats[key] = value;
+                } else {
+                  user.stats = { [key]: value };
+                }
               }
             }
           }
         }
-        await User.findByIdAndUpdate(context.user._id, { inventory: context.user.inventory, stats: context.user.stats });
+
+        await User.findOneAndUpdate({ email: context.user.email }, user);
 
         return nextSegment;
       }
