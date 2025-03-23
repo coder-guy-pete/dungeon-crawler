@@ -156,20 +156,25 @@ const resolvers = {
           throw new Error('User not found');
         }
 
-        user.stats = {
-          HP: 50,
-          Strength: 4,
-          Dexterity: 8,
-          Wisdom: 5,
-          Charm: 6,
-          Luck: 8,
+        const reset = {
+          stats: {
+            HP: 50,
+            Strength: 4,
+            Dexterity: 8,
+            Wisdom: 5,
+            Charm: 6,
+            Luck: 8,
+          },
+          inventory: {},
+          currentSegmentId: 0,
         };
 
-        user.inventory = {};
-        user.currentSegmentId = 0;
+        const resetUser = await User.findOneAndUpdate({ email: context.user.email }, reset, { new: true });
 
-        await User.findOneAndUpdate({ email: context.user.email }, user);
-        return user;
+        if (!resetUser) {
+          throw new Error('Could not reset user');
+        }
+        return resetUser;
       }
       throw new AuthenticationError('You need to be logged in!');
     },
