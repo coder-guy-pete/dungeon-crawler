@@ -5,10 +5,11 @@ interface IUser extends Document {
     username: string;
     email: string;
     password?: string;
-    wins: { type: Number, default: 0 };
-    losses: { type: Number, default: 0 };
+    wins: Number;
+    losses: Number;
     inventory?: { [key: string]: number };
     stats?: { [key: string]: number };
+    currentSegmentId: Number ;
     comparePassword(password: string): Promise<boolean>;
 }
 
@@ -18,6 +19,9 @@ const userSchema = new Schema<IUser>({
     password: { type: String, required: true, minlength: 8 },
     inventory: { type: Schema.Types.Mixed },
     stats: { type: Schema.Types.Mixed },
+    wins: { type: Number, default: 0 },
+    losses: { type: Number, default: 0 },
+    currentSegmentId: { type: Number, default: 0 },
 });
 
 userSchema.pre<IUser>('save', async function (next) {

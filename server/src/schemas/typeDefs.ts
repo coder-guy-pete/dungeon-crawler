@@ -27,6 +27,7 @@ const typeDefs = `
     password: String!
     wins: Int
     losses: Int
+    currentSegmentId: Int!
     inventory: JSON
     stats: JSON
   }

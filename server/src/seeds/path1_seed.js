@@ -298,7 +298,7 @@ export const path1Segments = [
         choices: [
             {
                 text: 'End Game.',
-                nextSegmentId: null,
+                nextSegmentId: 0,
                 effects: {},
             },
         ],
@@ -313,7 +313,7 @@ export const path1Segments = [
         choices: [
             {
                 text: "End Game.",
-                nextSegmentId: null,
+                nextSegmentId: 0,
                 effects: {}
             }
         ],
@@ -328,7 +328,7 @@ export const path1Segments = [
         choices: [
             {
                 text: "End Game.",
-                nextSegmentId: null,
+                nextSegmentId: 0,
                 effects: {}
             }
         ],
@@ -363,7 +363,7 @@ export const path1Segments = [
         choices: [
             {
                 text: 'End Game.',
-                nextSegmentId: null,
+                nextSegmentId: 0,
                 effects: {},
             },
         ],
@@ -398,7 +398,7 @@ export const path1Segments = [
         choices: [
             {
                 text: 'End Game.',
-                nextSegmentId: null,
+                nextSegmentId: 0,
                 effects: {},
             },
         ],
@@ -433,7 +433,7 @@ export const path1Segments = [
         choices: [
             {
                 text: 'End Game.',
-                nextSegmentId: null,
+                nextSegmentId: 0,
                 effects: {},
             },
         ],
@@ -508,7 +508,7 @@ export const path1Segments = [
         choices: [
             {
                 text: 'End Game.',
-                nextSegmentId: null,
+                nextSegmentId: 0,
                 effects: {},
             },
         ],
@@ -543,7 +543,7 @@ export const path1Segments = [
         choices: [
             {
                 text: 'You Win!',
-                nextSegmentId: null,
+                nextSegmentId: 0,
                 effects: {},
             },
         ],
@@ -718,7 +718,7 @@ export const path1Segments = [
         choices: [
             {
                 text: 'End Game.',
-                nextSegmentId: null,
+                nextSegmentId: 0,
                 effects: {},
             },
         ],
@@ -733,7 +733,7 @@ export const path1Segments = [
         choices: [
             {
                 text: 'You Win!',
-                nextSegmentId: null,
+                nextSegmentId: 0,
                 effects: {},
             },
         ],
@@ -788,7 +788,7 @@ export const path1Segments = [
         choices: [
             {
                 text: 'End Game.',
-                nextSegmentId: null,
+                nextSegmentId: 0,
                 effects: {},
             },
         ],
@@ -843,7 +843,7 @@ export const path1Segments = [
         choices: [
             {
                 text: 'End Game.',
-                nextSegmentId: null,
+                nextSegmentId: 0,
                 effects: {}
             }
         ],
@@ -930,7 +930,7 @@ export const path1Segments = [
         choices: [
             {
                 text: 'End Game.',
-                nextSegmentId: null,
+                nextSegmentId: 0,
                 effects: {},
             },
         ],
@@ -965,7 +965,7 @@ export const path1Segments = [
         choices: [
             {
                 text: 'End Game.',
-                nextSegmentId: null,
+                nextSegmentId: 0,
                 effects: {},
             },
         ],
@@ -1040,7 +1040,7 @@ export const path1Segments = [
         choices: [
             {
                 text: 'End Game.',
-                nextSegmentId: null,
+                nextSegmentId: 0,
                 effects: {},
             },
         ],

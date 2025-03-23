@@ -33,6 +33,7 @@ interface AuthContext {
     losses: number;
     inventory?: { [key: string]: number };
     stats?: { [key: string]: number };
+    currentSegmentId: number;
   }
 }
 
@@ -61,7 +62,7 @@ const resolvers = {
         },
       });
 
-      const token = signToken(user.username, user.email, user._id);
+      const token = signToken(user.username, user.email, user._id as mongoose.Types.ObjectId);
       
       return { token, user };
     },
@@ -78,7 +79,7 @@ const resolvers = {
         throw new AuthenticationError('Could not authenticate user');
       }
 
-      const token = signToken(user.username, user.email, user._id);
+      const token = signToken(user.username, user.email, user._id as mongoose.Types.ObjectId);
 
       return { token, user };
     },
@@ -130,8 +131,19 @@ const resolvers = {
           }
         }
 
-        await User.findOneAndUpdate({ email: context.user.email }, user);
+        if (choice.nextSegmentId) {
+          user.currentSegmentId = choice.nextSegmentId
+        }
 
+        if (segment.win) {
+          user.wins = Number(user.wins) + 1;
+        }
+
+        if (segment.loss) {
+          user.losses = Number(user.losses) + 1;
+        }
+
+        await User.findOneAndUpdate({ email: context.user.email }, user);
         return nextSegment;
       }
       throw new AuthenticationError('You need to be logged in!');
