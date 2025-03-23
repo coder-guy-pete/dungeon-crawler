@@ -148,6 +148,31 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
+    resetGame: async (_parent: any, _args: any, context: AuthContext) => {
+      if (context.user) {
+        const user = await User.findOne({ email: context.user.email });
+
+        if (!user) {
+          throw new Error('User not found');
+        }
+
+        user.stats = {
+          HP: 50,
+          Strength: 4,
+          Dexterity: 8,
+          Wisdom: 5,
+          Charm: 6,
+          Luck: 8,
+        };
+
+        user.inventory = {};
+        user.currentSegmentId = 0;
+
+        await User.findOneAndUpdate({ email: context.user.email }, user);
+        return user;
+      }
+      throw new AuthenticationError('You need to be logged in!');
+    },
   },
 };
 

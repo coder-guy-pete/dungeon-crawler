@@ -54,6 +54,7 @@ const typeDefs = `
     createUser(input: UserInput!): Auth
     login(email: String!, password: String!): Auth
     choosePath(segmentId: ID!, choiceIndex: Int!): StorySegment
+    resetGame: User
   }
 `;
 
