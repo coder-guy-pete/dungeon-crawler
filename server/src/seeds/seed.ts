@@ -13,16 +13,9 @@ interface Choice {
     nextSegmentId: number | null;
     effects?: {
         inventory?: { [key: string]: number };
-        stats?: {
-            HP?: number;
-            Strength?: number;
-            Dexterity?: number;
-            Wisdom?: number;
-            Charm?: number;
-            Luck?: number;
-        };
-    };
-}
+        stats?: { [key: string]: number }
+    }
+};
 
 interface IStorySegment {
     _id: mongoose.Types.ObjectId;

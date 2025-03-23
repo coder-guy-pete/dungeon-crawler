@@ -1,14 +1,17 @@
 const typeDefs = `
   type StorySegment {
     id: ID!
+    segmentId: Int!
     text: String!
     choices: [Choice!]!
     ending: Boolean
+    win: Boolean
+    loss: Boolean
   }
 
   type Choice {
     text: String!
-    nextSegmentId: ID!
+    nextSegmentId: Int!
     effects: Effects
   }
 
@@ -25,7 +28,7 @@ const typeDefs = `
     wins: Int
     losses: Int
     inventory: JSON
-    stats: JSON
+    stats: Stats
   }
   
   input UserInput {
@@ -42,7 +45,7 @@ const typeDefs = `
   scalar JSON
 
   type Query {
-    getStorySegment(id: ID!): StorySegment
+    getStorySegment(segmentId: Int!): StorySegment
     me: User
   }
 

@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { User, StorySegment } from '../models/index.js';
 import { signToken, AuthenticationError } from '../utils/auth.js';
 
@@ -14,20 +15,37 @@ interface LoginArgs {
   password: string;
 }
 
-interface UserArgs {
-  id: string;
+interface StorySegmentArgs {
+  segmentId: number;
+}
+
+interface ChoosePathArgs {
+  segmentId: number;
+  choiceIndex: number;
+}
+
+interface AuthContext {
+  user?: {
+    _id: mongoose.Types.ObjectId;
+    username: string;
+    email: string;
+    wins: number;
+    losses: number;
+    inventory?: { [key: string]: number };
+    stats?: { [key: string]: number };
+  }
 }
 
 const resolvers = {
   Query: {
-    me: async (_parent: any, _args: any, context: any) => {
+    me: async (_parent: any, _args: any, context: AuthContext) => {
       if (context.user) {
         return User.findOne({ _id: context.user._id });
       }
       throw new AuthenticationError('You need to be logged in!');
     },
-    getStorySegment: async (_parent: any, { id }: UserArgs) => {
-      return StorySegment.findById(id);
+    getStorySegment: async (_parent: any, { segmentId }: StorySegmentArgs) => {
+      return StorySegment.findOne({ segmentId });
     },
   },
   Mutation: {
@@ -54,28 +72,40 @@ const resolvers = {
 
       return { token, user };
     },
-    choosePath: async (_parent: any, { segmentId, choiceIndex }: any, context: any) => {
+    choosePath: async (_parent: any, { segmentId, choiceIndex }: ChoosePathArgs, context: AuthContext) => {
       if (context.user) {
-        const segment = await StorySegment.findById(segmentId);
+        const segment = await StorySegment.findOne({ segmentId });
         
         if (!segment) {
           throw new Error('Segment not found');
         }
         const choice = segment.choices[choiceIndex];
-        const nextSegment = await StorySegment.findById(choice.nextSegmentId);
+        const nextSegment = await StorySegment.findOne({ segmentId: choice.nextSegmentId });
 
         if (choice.effects) {
-          if (choice.effects.inventory) {
-            for (const [key, value] of Object.entries(choice.effects.inventory)) {
-              context.user.inventory[key] += value;
+          const { inventory, stats } = choice.effects;
+
+          if (inventory) {
+            for (const [key, value] of Object.entries(inventory)) {
+              if (context.user.inventory) {
+                context.user.inventory[key] = (context.user.inventory[key] || 0) + value;
+              } else {
+                context.user.inventory = { [key]: value };
+              }
             }
           }
-          if (choice.effects.stats) {
-            for (const [key, value] of Object.entries(choice.effects.stats)) {
-              context.user.stats[key] += value;
+
+          if (stats) {
+            for (const [key, value] of Object.entries(stats)) {
+              if (context.user.stats) {
+                context.user.stats[key] = (context.user.stats[key] || 0) + value;
+              } else {
+                context.user.stats = { [key]: value };
+              }
             }
           }
         }
+        await User.findByIdAndUpdate(context.user._id, { inventory: context.user.inventory, stats: context.user.stats });
 
         return nextSegment;
       }
