@@ -24,12 +24,7 @@ const Game: React.FC = () => {
 
     const handleChoice = async (choiceIndex: number) => {
         try {
-            console.log("handleChoice: Before Mutation - segmentId:", segmentId, "choiceIndex:", choiceIndex);
-
             const { data: choiceData } = await choosePath({ variables: { segmentId, choiceIndex } });
-
-            console.log("handleChoice: After Mutation - choiceData:", choiceData);
-            
             setSegmentId(choiceData.choosePath.segmentId);
         } catch (err) {
         console.error(err);
@@ -52,8 +47,6 @@ const Game: React.FC = () => {
             <div>
             <p>{data.getStorySegment.text}</p>
             {data.getStorySegment.choices.map((choice, index) => (
-                console.log("Choice:", choice),
-                console.log("Index:", index),
                 <button key={index} onClick={() => handleChoice(index)}>
                 {choice.text}
                 </button>
