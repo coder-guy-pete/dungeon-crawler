@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_STORY_SEGMENT, ME } from '../graphql/queries';
 import { CHOOSE_PATH, RESET_GAME } from '../graphql/mutations';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 const Game: React.FC = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [segmentId, setSegmentId] = useState(0); 
     const { loading, error, data } = useQuery<{ getStorySegment: { text: string; choices: { text: string, nextSegmentId: number }[] } }>(GET_STORY_SEGMENT, { variables: { segmentId } });
     const { loading: meLoading, error: meError, data: meData } = useQuery(ME);
