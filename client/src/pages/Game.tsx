@@ -9,12 +9,11 @@ const Game: React.FC = () => {
     const [segmentId, setSegmentId] = useState(0); 
     const { loading, error, data } = useQuery<{ getStorySegment: { text: string; choices: { text: string, nextSegmentId: number }[] } }>(GET_STORY_SEGMENT, { variables: { segmentId } });
     const { loading: meLoading, error: meError, data: meData } = useQuery(ME);
-    const [choosePath] = useMutation(CHOOSE_PATH);
+    const [choosePath] = useMutation(CHOOSE_PATH, { refetchQueries: [{ query: ME }] });
     const [resetGame] = useMutation(RESET_GAME);
 
     useEffect(() => {
         if (meData) {
-            console.log("useEffect Setting segmentId to:", meData.me.currentSegmentId);
             setSegmentId(meData.me.currentSegmentId);
         }
     }, [meData]);
