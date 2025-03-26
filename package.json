@@ -22,7 +22,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/coder-guy-pete/dungeon-crawler/issues"
   },
