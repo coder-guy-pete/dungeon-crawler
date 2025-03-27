@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { SIGNUP_USER } from '../graphql/mutations';
 import { useNavigate } from 'react-router-dom';
 import { useAuthService } from '../utils/auth';
 
-const Signup: React.FC = () => {
+function Signup() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

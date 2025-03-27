@@ -6,7 +6,6 @@ import Game from './pages/Game'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import { useAuth, useAuthService } from './utils/auth'
-import './App.css'
 
 function App() {
   const { loggedIn } = useAuth();
