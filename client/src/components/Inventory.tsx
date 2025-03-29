@@ -1,7 +1,8 @@
 // Inventory.tsx
 import { Flex, Heading, Text, Icon } from '@chakra-ui/react';
-import { FaKey, FaGem } from 'react-icons/fa';
-import { GiBroadsword, GiVikingShield, GiStonePile } from "react-icons/gi";
+import { GiBroadsword, GiVikingShield, GiStonePile, GiSkeletonKey, GiLockpicks, GiPowder, GiFlintSpark, GiChopsticks } from "react-icons/gi";
+import { PiCoinsBold } from "react-icons/pi";
+import { RiToolsLine } from "react-icons/ri";
 
 interface InventoryProps {
     inventory: any;
@@ -9,11 +10,17 @@ interface InventoryProps {
 
 function Inventory({ inventory }: InventoryProps) {
     const inventoryIcons = {
-        key: <Icon as={FaKey} />,
-        sword: <Icon as={GiBroadsword} />,
-        shield: <Icon as={GiVikingShield} />,
-        gem: <Icon as={FaGem} />,
+        "Master Key": <Icon as={GiSkeletonKey} />,
+        "Sword": <Icon as={GiBroadsword} />,
+        "Leather Shield": <Icon as={GiVikingShield} />,
+        "Coins": <Icon as={PiCoinsBold} />,
         "Sharp Stone": <Icon as={GiStonePile} />,
+        "Lockpicks": <Icon as={GiLockpicks} />,
+        "Black Powder": <Icon as={GiPowder} />,
+        "Flint and Steel": <Icon as={GiFlintSpark} />,
+        "Metal Bar": <Icon as={GiChopsticks} />,
+        "Guard's Key": <Icon as={GiSkeletonKey} />,
+        "Crude Tools": <Icon as={RiToolsLine} />,
     };
 
     if (!inventory || typeof inventory !== 'object' || Object.keys(inventory).length === 0) {

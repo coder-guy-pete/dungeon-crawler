@@ -29,7 +29,7 @@ export const path1Segments = [
             {
                 text: 'Slowly open the door and sneak out.',
                 nextSegmentId: 6,
-                effects: { inventory: { "Loose Stone": -1 }, stats: { Dexterity: 2, Luck: 1 } },
+                effects: { inventory: { "Sharp Stone": -1 }, stats: { Dexterity: 2, Luck: 1 } },
             },
             {
                 text: 'Burst out of the cell, ready to fight.',
@@ -189,12 +189,12 @@ export const path1Segments = [
     {
         _id: new mongoose.Types.ObjectId(),
         segmentId: 20,
-        text: 'You search the armory thoroughly. You find a leather sheath for your sword and a small pouch containing a few coins. What do you do?',
+        text: 'You search the armory thoroughly. You find a leather shield and a small pouch containing a few coins. What do you do?',
         choices: [
             {
                 text: 'Equip the sheath and pouch and leave the armory.',
                 nextSegmentId: 22,
-                effects: { inventory: { "Leather Sheath": 1, "Coins": 3 } },
+                effects: { inventory: { "Leather Shield": 1, "Coins": 3 } },
             },
             {
                 text: 'Continue searching for more useful items.',

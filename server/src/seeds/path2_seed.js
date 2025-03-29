@@ -54,7 +54,7 @@ export const path2Segments = [
             {
                 text: "Try to find something in the cell that you can use as a weapon.",
                 nextSegmentId: 66,
-                effects: { inventory: { "Makeshift Weapon": 1 }, stats: { Strength: 1 } },
+                effects: { inventory: { "Metal Bar": 1 }, stats: { Strength: 1 } },
             },
         ],
         ending: false,
@@ -109,7 +109,7 @@ export const path2Segments = [
             {
                 text: "Wait for the guard to return and then try to use the bar to defend yourself.",
                 nextSegmentId: 69,
-                effects: { inventory: { "Metal Bar": 1 }, stats: { Strength: 2 } },
+                effects: { stats: { Strength: 2 } },
             },
             {
                 text: "Try to use the bar to pry open the door.",
@@ -277,9 +277,9 @@ export const path2Segments = [
         text: "You wait for the guard to turn his back and then attack him. You manage to overpower him and knock him out. What do you do?",
         choices: [
             {
-                text: "Take the guard's keys and try to find a way out.",
+                text: "Take the guard's key and try to find a way out.",
                 nextSegmentId: 6,
-                effects: { inventory: { "Guard's Keys": 1 }, stats: { Strength: 2 } },
+                effects: { inventory: { "Guard's Key": 1 }, stats: { Strength: 2 } },
             },
         ],
         ending: false,
@@ -354,7 +354,7 @@ export const path2Segments = [
             {
                 text: "Use the tools to aid the prisoners in their escape.",
                 nextSegmentId: 80,
-                effects: { inventory: { "Crude Tools": 1 }, stats: { Dexterity: 2 } },
+                effects: { stats: { Dexterity: 2 } },
             },
             {
                 text: "Keep the tools hidden, and use them for your own escape attempt.",
