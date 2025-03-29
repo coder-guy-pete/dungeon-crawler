@@ -9,7 +9,7 @@ export const path1Segments = [
             {
                 text: 'Try to use the stone to pick the lock.',
                 nextSegmentId: 4,
-                effects: { stats: { Dexterity: 2 } },
+                effects: { inventory: { "Sharp Stone": -1}, stats: { Dexterity: 2 } },
             },
             {
                 text: 'Keep the stone as a potential weapon.',
@@ -29,7 +29,7 @@ export const path1Segments = [
             {
                 text: 'Slowly open the door and sneak out.',
                 nextSegmentId: 6,
-                effects: { inventory: { "Sharp Stone": -1 }, stats: { Dexterity: 2, Luck: 1 } },
+                effects: { stats: { Dexterity: 2, Luck: 1 } },
             },
             {
                 text: 'Burst out of the cell, ready to fight.',
@@ -89,7 +89,7 @@ export const path1Segments = [
             {
                 text: 'Try to sneak into the guard room and steal the key.',
                 nextSegmentId: 11,
-                effects: { stats: { Dexterity: 2, Luck: 1 } },
+                effects: { inventory: { "Master Key": 1 }, stats: { Dexterity: 2, Luck: 1 } },
             },
             {
                 text: 'Continue down the hallway, hoping to find another way out.',
@@ -109,7 +109,7 @@ export const path1Segments = [
             {
                 text: 'Try to unlock a nearby door.',
                 nextSegmentId: 13,
-                effects: { inventory: { "Master Key": 1 } },
+                effects: {},
             },
             {
                 text: 'Leave the guard room and continue down the hallway.',
@@ -192,7 +192,7 @@ export const path1Segments = [
         text: 'You search the armory thoroughly. You find a leather shield and a small pouch containing a few coins. What do you do?',
         choices: [
             {
-                text: 'Equip the sheath and pouch and leave the armory.',
+                text: 'Equip the shield and pouch and leave the armory.',
                 nextSegmentId: 22,
                 effects: { inventory: { "Leather Shield": 1, "Coins": 3 } },
             },
@@ -749,7 +749,7 @@ export const path1Segments = [
             {
                 text: 'Continue searching the armory for more useful items.',
                 nextSegmentId: 50,
-                effects: { inventory: { "Lockpicks": 1 }, stats: { Dexterity: 1 } },
+                effects: { stats: { Dexterity: 1 } },
             },
             {
                 text: 'Leave the armory and continue down the hallway.',
@@ -802,7 +802,7 @@ export const path1Segments = [
         text: 'You use the master key to unlock a nearby door. Inside, you find a small storeroom. It is filled with crates and barrels that are loaded with a black powder like substance. What do you do?',
         choices: [
             {
-                text: 'Search the room for anything useful.',
+                text: 'Take the black powder and continue searching the room.',
                 nextSegmentId: 52,
                 effects: { inventory: { "Black Powder": 1 }, stats: { Wisdom: 1 } },
             },
@@ -829,7 +829,7 @@ export const path1Segments = [
             {
                 text: 'Light the gunpowder and make a run for it.',
                 nextSegmentId: 53,
-                effects: { stats: { Luck: 2 } }
+                effects: { inventory: { "Black Powder": -1 }, stats: { Luck: 2 } }
             }
         ],
         ending: false,
@@ -839,7 +839,7 @@ export const path1Segments = [
     {
         _id: new mongoose.Types.ObjectId(),
         segmentId: 53,
-        text: 'You light a spark and run to exit the room, but you gravely underestimated how large the stockpile was. The explosion  can be seen from several miles away and causes a large part of the castle to cave in. Burying you and the guards in the dungeon alive. Game Over.',
+        text: 'You light a spark and run to exit the room, but you gravely underestimated how large the stockpile was. The explosion can be seen from several miles away and causes a large part of the castle to cave in. Burying you and the guards in the dungeon alive. Game Over.',
         choices: [
             {
                 text: 'End Game.',
@@ -981,7 +981,7 @@ export const path1Segments = [
             {
                 text: 'Wait and listen for any sounds outside the cell.',
                 nextSegmentId: 58,
-                effects: { inventory: { "Sharp Stone": 1 }, stats: { Wisdom: 1 } },
+                effects: { stats: { Wisdom: 1 } },
             },
             {
                 text: 'Try to find another loose stone',
