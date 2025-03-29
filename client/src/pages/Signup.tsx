@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import { SIGNUP_USER } from '../graphql/mutations';
 import { useNavigate } from 'react-router-dom';
 import { useAuthService } from '../utils/auth';
-import { Flex, Heading, Field, Input, Button } from '@chakra-ui/react';
+import { Flex, Heading, Box, Field, Input, Button } from '@chakra-ui/react';
 
 function Signup() {
     const [username, setUsername] = useState('');
@@ -25,24 +25,26 @@ function Signup() {
     };
 
     return (
-        <Flex bg="blackAlpha.800" w="100vw" h="100vh" direction="column" justifyContent="center" alignItems="center" gap={4}>
-        <Heading size="4xl" color="whitesmoke">Signup</Heading>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', backgroundColor: 'lightgray', padding: '2rem', borderRadius: '8px', opacity: 0.8 }}>
-            <Field.Root required>
-                <Field.Label>Username <Field.RequiredIndicator /></Field.Label>
-            </Field.Root>
-            <Input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-            <Field.Root required>
-                <Field.Label>Email <Field.RequiredIndicator /></Field.Label>
-            </Field.Root>
-            <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <Field.Root required>
-                <Field.Label>Password <Field.RequiredIndicator /></Field.Label>
-            </Field.Root>
-            <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <Button type="submit">Signup</Button>
-            <Button onClick={() => navigate('/')}>Home</Button>
-        </form>
+        <Flex bg="blackAlpha.900" w="100vw" h="100vh" direction="column" justifyContent="center" alignItems="center" gap={4}>
+        <Box background="url('/imgs/scroll.png') no-repeat center center" backgroundSize=" 100% 100%" w="100%" maxW="500px" h="auto" minH="600px" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+            <Heading size="4xl" fontFamily="fantasy">Signup</Heading>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: 'start' }}>
+                <Field.Root required>
+                    <Field.Label>Username <Field.RequiredIndicator /></Field.Label>
+                </Field.Root>
+                <Input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                <Field.Root required>
+                    <Field.Label>Email <Field.RequiredIndicator /></Field.Label>
+                </Field.Root>
+                <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <Field.Root required>
+                    <Field.Label>Password <Field.RequiredIndicator /></Field.Label>
+                </Field.Root>
+                <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <Button type="submit">Signup</Button>
+                <Button onClick={() => navigate('/')}>Home</Button>
+            </form>
+        </Box>
         {error && <p>Signup failed: {error.message}</p>}
         </Flex>
     );
