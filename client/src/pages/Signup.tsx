@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import { SIGNUP_USER } from '../graphql/mutations';
 import { useNavigate } from 'react-router-dom';
 import { useAuthService } from '../utils/auth';
-import { Flex, Heading, Box, Field, Input, Button } from '@chakra-ui/react';
+import { Flex, Image, Heading, Box, Field, Input, Button } from '@chakra-ui/react';
 
 function Signup() {
     const [username, setUsername] = useState('');
@@ -25,27 +25,31 @@ function Signup() {
     };
 
     return (
-        <Flex bg="blackAlpha.900" w="100vw" h="100vh" direction="column" justifyContent="center" alignItems="center" gap={4}>
-        <Box background="url('/imgs/scroll.png') no-repeat center center" backgroundSize=" 100% 100%" w="100%" maxW="500px" h="auto" minH="600px" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-            <Heading size="4xl" fontFamily="fantasy">Signup</Heading>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: 'start' }}>
-                <Field.Root required>
-                    <Field.Label>Username <Field.RequiredIndicator /></Field.Label>
-                </Field.Root>
-                <Input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                <Field.Root required>
-                    <Field.Label>Email <Field.RequiredIndicator /></Field.Label>
-                </Field.Root>
-                <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                <Field.Root required>
-                    <Field.Label>Password <Field.RequiredIndicator /></Field.Label>
-                </Field.Root>
-                <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <Button type="submit">Signup</Button>
-                <Button onClick={() => navigate('/')}>Home</Button>
-            </form>
-        </Box>
-        {error && <p>Signup failed: {error.message}</p>}
+        <Flex bg="blackAlpha.900" w="100vw" h="100vh" direction="row" justifyContent="center" alignItems="center">
+            <Image src = "/imgs/torch.gif" alt="Animated Torch" h="200px" />
+            <Box background="url('/imgs/scroll.png') no-repeat center center" backgroundSize=" 100% 100%" w="100%" maxW="500px" h="auto" minH="600px" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+                <Heading size="4xl" pb={4}>Signup</Heading>
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: 'start' }}>
+                    <Field.Root required>
+                        <Field.Label>Username <Field.RequiredIndicator /></Field.Label>
+                    </Field.Root>
+                    <Input type="text" placeholder="Username" variant="subtle" backgroundColor="wheat" borderColor="black" value={username} onChange={(e) => setUsername(e.target.value)} />
+                    <Field.Root required>
+                        <Field.Label>Email <Field.RequiredIndicator /></Field.Label>
+                    </Field.Root>
+                    <Input type="email" placeholder="Email" variant="subtle" backgroundColor="wheat" borderColor="black"  value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <Field.Root required>
+                        <Field.Label>Password <Field.RequiredIndicator /></Field.Label>
+                    </Field.Root>
+                    <Input type="password" placeholder="Password" variant="subtle" backgroundColor="wheat" borderColor="black"  value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <Flex justifyContent="space-between" gap={4} mt={4}>
+                        <Button type="submit">Signup</Button>
+                        <Button onClick={() => navigate('/')}>Home</Button>
+                    </Flex>
+                </form>
+            </Box>
+            {error && <p>Signup failed: {error.message}</p>}
+            <Image src = "/imgs/torch.gif" alt="Animated Torch" h="200px" />
         </Flex>
     );
 };
