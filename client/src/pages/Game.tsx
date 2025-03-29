@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import { GET_STORY_SEGMENT, ME } from '../graphql/queries';
 import { CHOOSE_PATH, RESET_GAME } from '../graphql/mutations';
 import { Box, Card, Button, Flex, Heading, Text } from '@chakra-ui/react';
+import Inventory from '../components/Inventory';
 
 function Game() {
     const [segmentId, setSegmentId] = useState(0); 
@@ -58,8 +59,7 @@ function Game() {
                             <Box display="flex" flexDirection="column" justifyContent="center" gap={4} mt={4}>
                                 <Box display="flex" justifyContent="space-between" gap={4}>
                                     <Flex direction="column" gap={2} mt={4} w="50%">
-                                        <Heading size="lg">Inventory:</Heading>
-                                        <Text>{JSON.stringify(meData.me.inventory)}</Text>
+                                        {meData.me.inventory && (<Inventory inventory={meData.me.inventory} />)}
                                     </Flex>
                                     <Flex direction="column" gap={2} mt={4} w="50%">
                                         <Heading size="lg">Stats:</Heading>
