@@ -59,7 +59,7 @@ function Game() {
                             <Box display="flex" flexDirection="column" justifyContent="center" gap={4} mt={4}>
                                 <Box display="flex" justifyContent="space-between" gap={4}>
                                     <Flex direction="column" gap={2} mt={4} w="50%">
-                                        {meData.me.inventory && (<Inventory inventory={meData.me.inventory} />)}
+                                    <Inventory inventory={meData?.me?.inventory || []} />
                                     </Flex>
                                     <Flex direction="column" gap={2} mt={4} w="50%">
                                         <Heading size="lg">Stats:</Heading>

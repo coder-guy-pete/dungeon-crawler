@@ -14,7 +14,7 @@ export const path1Segments = [
             {
                 text: 'Keep the stone as a potential weapon.',
                 nextSegmentId: 5,
-                effects: { inventory: { "Sharp Stone": 1 } },
+                effects: {},
             },
         ],
         ending: false,

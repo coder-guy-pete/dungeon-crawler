@@ -42,7 +42,7 @@ const seedDB = async () => {
                     {
                         text: 'Feel around the room for anything useful',
                         nextSegmentId: 1,
-                        effects: { inventory: { "Loose Stone": 1 }, stats: { Dexterity: 1 } },
+                        effects: { inventory: { "Sharp Stone": 1 }, stats: { Dexterity: 1 } },
                     },
                     {
                         text: 'Try to calm down and wait for your eyes to adjust',

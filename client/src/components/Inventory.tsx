@@ -1,7 +1,7 @@
 // Inventory.tsx
 import { Flex, Heading, Text, Icon } from '@chakra-ui/react';
 import { FaKey, FaGem } from 'react-icons/fa';
-import { GiBroadsword, GiVikingShield } from "react-icons/gi";
+import { GiBroadsword, GiVikingShield, GiStonePile } from "react-icons/gi";
 
 interface InventoryProps {
     inventory: any;
@@ -13,9 +13,10 @@ function Inventory({ inventory }: InventoryProps) {
         sword: <Icon as={GiBroadsword} />,
         shield: <Icon as={GiVikingShield} />,
         gem: <Icon as={FaGem} />,
+        "Sharp Stone": <Icon as={GiStonePile} />,
     };
 
-    if (!Array.isArray(inventory)) {
+    if (!inventory || typeof inventory !== 'object' || Object.keys(inventory).length === 0) {
         return (
             <Flex direction="column" gap={2}>
                 <Heading size="lg">Inventory:</Heading>
@@ -27,10 +28,12 @@ function Inventory({ inventory }: InventoryProps) {
         <Flex direction="column" gap={2}>
             <Heading size="lg">Inventory:</Heading>
             <Flex direction="column" gap={2}>
-                {inventory.map((item: string, index: number) => (
+                {Object.keys(inventory).map((item, index: number) => (
                     <Flex key={index} align="center" gap={2}>
                         {inventoryIcons[item as keyof typeof inventoryIcons] || null}
-                        <Text>{item}</Text>
+                        <Text>
+                            {item} ({inventory[item]})
+                        </Text>
                     </Flex>
                 ))}
             </Flex>
