@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../graphql/mutations';
 import { useNavigate } from 'react-router-dom';
 import { useAuthService } from '../utils/auth';
-import { Flex, Image, Heading, Box, Field, Input, Button } from '@chakra-ui/react';
+import { Flex, Image, Heading, Box, Input, Button } from '@chakra-ui/react';
 
 function Login() {
     const [email, setEmail] = useState('');
