@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_STORY_SEGMENT, ME } from '../graphql/queries';
 import { CHOOSE_PATH, RESET_GAME } from '../graphql/mutations';
+import { useNavigate } from 'react-router-dom';
+import { useAuthService } from '../utils/auth';
 import { Box, Card, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import Inventory from '../components/Inventory';
 
@@ -11,6 +13,8 @@ function Game() {
     const { loading: meLoading, error: meError, data: meData } = useQuery(ME);
     const [choosePath] = useMutation(CHOOSE_PATH, { refetchQueries: [{ query: ME }] });
     const [resetGame] = useMutation(RESET_GAME);
+    const navigate = useNavigate();
+    const authService = useAuthService();
 
     useEffect(() => {
         if (meData) {
@@ -37,6 +41,11 @@ function Game() {
         } catch (err) {
         console.error(err);
         }
+    };
+
+    const handleLogout = () => {
+        authService.logout();
+        navigate('/');
     };
 
     return (
@@ -66,7 +75,10 @@ function Game() {
                                         <Text>{JSON.stringify(meData.me.stats)}</Text>
                                     </Flex>
                                 </Box>
-                                <Button w="fit-content" variant="surface" colorPalette="yellow" onClick={handleResetGame}>Reset Game</Button>
+                                <Flex gap={4}>
+                                    <Button w="fit-content" variant="surface" colorPalette="yellow" onClick={handleResetGame}>Reset Game</Button>
+                                    <Button w="fit-content" variant="surface" colorPalette="red" onClick={handleLogout}>Exit Game</Button>
+                                </Flex>
                             </Box>
                         )}
                         </Box>
