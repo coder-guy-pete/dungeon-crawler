@@ -13,8 +13,9 @@ interface Choice {
     nextSegmentId: number | null;
     effects?: {
         inventory?: { [key: string]: number };
-        stats?: { [key: string]: number }
-    }
+        stats?: { [key: string]: number };
+    };
+    soundEffect?: string;
 };
 
 interface IStorySegment {
@@ -25,6 +26,7 @@ interface IStorySegment {
     ending?: boolean;
     win?: boolean;
     loss?: boolean;
+    backgroundImage?: string;
 }
 
 const seedDB = async () => {
@@ -43,6 +45,7 @@ const seedDB = async () => {
                         text: 'Feel around the room for anything useful',
                         nextSegmentId: 1,
                         effects: { inventory: { "Sharp Stone": 1 }, stats: { Dexterity: 1 } },
+                        soundEffect: '660335'
                     },
                     {
                         text: 'Try to calm down and wait for your eyes to adjust',
@@ -58,6 +61,7 @@ const seedDB = async () => {
                 ending: false,
                 win: false,
                 loss: false,
+                backgroundImage: '/imgs/prison_cell_closed.webp',
             },
         ];
         const allSegments = baseStorySegment.concat(path1Segments, path2Segments, path3Segments);

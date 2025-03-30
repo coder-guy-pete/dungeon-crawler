@@ -9,7 +9,7 @@ import Inventory from '../components/Inventory';
 
 function Game() {
     const [segmentId, setSegmentId] = useState(0); 
-    const { loading, error, data } = useQuery<{ getStorySegment: { text: string; choices: { text: string, nextSegmentId: number }[] } }>(GET_STORY_SEGMENT, { variables: { segmentId } });
+    const { loading, error, data } = useQuery<{ getStorySegment: { text: string; choices: { text: string, nextSegmentId: number, soundEffect: string }[], backgroundImage: string } }>(GET_STORY_SEGMENT, { variables: { segmentId } });
     const { loading: meLoading, error: meError, data: meData } = useQuery(ME);
     const [choosePath] = useMutation(CHOOSE_PATH, { refetchQueries: [{ query: ME }] });
     const [resetGame] = useMutation(RESET_GAME);
@@ -29,6 +29,33 @@ function Game() {
         try {
             const { data: choiceData } = await choosePath({ variables: { segmentId, choiceIndex } });
             setSegmentId(choiceData.choosePath.segmentId);
+
+            if (data?.getStorySegment.choices[choiceIndex]?.soundEffect) {
+                const soundQuery = data.getStorySegment.choices[choiceIndex].soundEffect;
+                const apiKey = import.meta.env.VITE_FREESOUND_API_KEY;
+
+                if (apiKey) {
+                    await fetch(`https://freesound.org/apiv2/sounds/${soundQuery}?token=${apiKey}`)
+                    .then(response => response.json())
+                    .then((soundData) => {
+                        if (soundData && soundData.previews) {
+                            const soundUrl = soundData.previews['preview-hq-mp3'];
+                            const audio = new Audio(soundUrl);
+                            const startTime = 0;
+                            const endTime = 3;
+
+                            audio.currentTime = startTime;
+                            audio.play();
+
+                            setTimeout(() => {
+                                audio.pause();
+                            }, (endTime - startTime) * 1000);
+                        }
+                    })
+                }
+            } else {
+                console.log('No sound effect for this choice');
+            }
         } catch (err) {
         console.error(err);
         }
@@ -50,7 +77,7 @@ function Game() {
 
     return (
         <Box background="blackAlpha.900">
-        <Box background="url('/imgs/prison_cell_closed.webp') no-repeat center center" w="100vw" h="100vh" display="flex" direction="row" justifyContent="center" alignItems="center">
+        <Box background={`url('${data?.getStorySegment?.backgroundImage}') no-repeat center center`} w="100vw" h="100vh" display="flex" direction="row" justifyContent="center" alignItems="center">
             <Card.Root size="lg" opacity={0.8}>
                 <Card.Body gap={4} backgroundColor="wheat" >
                     <Heading size="2xl">Dungeon Crawler</Heading>
