@@ -8,13 +8,13 @@ const typeDefs = `
     win: Boolean
     loss: Boolean
     backgroundImage: String
-    soundEffect: String
   }
 
   type Choice {
     text: String!
     nextSegmentId: Int!
     effects: Effects
+    soundEffect: String
   }
 
   type Effects {

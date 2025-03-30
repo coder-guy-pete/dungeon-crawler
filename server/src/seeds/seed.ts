@@ -34,7 +34,7 @@ const seedDB = async () => {
         await StorySegment.deleteMany({});
 
         const baseStorySegment: IStorySegment[] = [
-            { // Start
+            {
                 _id: new mongoose.Types.ObjectId(),
                 segmentId: 0,
                 text: 'You wake up in a dark, cold cell. Your head throbs, and you can barely remember anything. What do you do?',
