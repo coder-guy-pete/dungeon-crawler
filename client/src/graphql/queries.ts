@@ -17,6 +17,8 @@ export const GET_STORY_SEGMENT = gql`
         ending
         win
         loss
+        backgroundImage
+        soundEffect
         }
     }
 `;

@@ -7,6 +7,8 @@ const typeDefs = `
     ending: Boolean
     win: Boolean
     loss: Boolean
+    backgroundImage: String
+    soundEffect: String
   }
 
   type Choice {
