@@ -51,11 +51,13 @@ const seedDB = async () => {
                         text: 'Try to calm down and wait for your eyes to adjust',
                         nextSegmentId: 2,
                         effects: { stats: { Wisdom: 1 } },
+                        soundEffect: '682879',
                     },
                     {
                         text: 'Panic and start yelling for help!!',
                         nextSegmentId: 3,
                         effects: { stats: { Charm: -1 } },
+                        soundEffect: '351598',
                     }
                 ],
                 ending: false,

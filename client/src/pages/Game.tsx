@@ -42,7 +42,7 @@ function Game() {
                             const soundUrl = soundData.previews['preview-hq-mp3'];
                             const audio = new Audio(soundUrl);
                             const startTime = 0;
-                            const endTime = 3;
+                            const endTime = 5;
 
                             audio.currentTime = startTime;
                             audio.play();
