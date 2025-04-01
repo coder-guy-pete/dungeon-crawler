@@ -8,7 +8,10 @@ import { Box, Card, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import Inventory from '../components/Inventory';
 
 function Game() {
-    const [segmentId, setSegmentId] = useState(0); 
+    const [segmentId, setSegmentId] = useState(0);
+    const [isTransitioning, setIsTransitioning] = useState(false);
+    const [transitionStage, setTransitionStage] = useState(0);
+    const [nextSegmentId, setNextSegmentId] = useState<number | null>(null);
     const { loading, error, data } = useQuery<{ getStorySegment: { text: string; choices: { text: string, nextSegmentId: number, soundEffect: string }[], backgroundImage: string } }>(GET_STORY_SEGMENT, { variables: { segmentId } });
     const { loading: meLoading, error: meError, data: meData } = useQuery(ME);
     const [choosePath] = useMutation(CHOOSE_PATH, { refetchQueries: [{ query: ME }] });
@@ -22,13 +25,26 @@ function Game() {
         }
     }, [meData]);
 
+    useEffect(() => {
+        if (transitionStage === 2) {
+            setSegmentId(nextSegmentId as number);
+            setNextSegmentId(null);
+            setTransitionStage(0);
+            setIsTransitioning(false);
+        }
+    }, [transitionStage]);
+
     if (loading || meLoading) return <p>Loading...</p>;
     if (error || meError) return <p>Error: {error?.message || meError?.message}</p>;
 
     const handleChoice = async (choiceIndex: number) => {
         try {
+            setTransitionStage(1);
             const { data: choiceData } = await choosePath({ variables: { segmentId, choiceIndex } });
-            setSegmentId(choiceData.choosePath.segmentId);
+            setNextSegmentId(choiceData.choosePath.segmentId);
+
+            console.log('Current Segment ID:', segmentId);
+            console.log('Next Segment ID:', choiceData.choosePath.segmentId);
 
             if (data?.getStorySegment.choices[choiceIndex]?.soundEffect) {
                 const soundQuery = data.getStorySegment.choices[choiceIndex].soundEffect;
@@ -49,15 +65,27 @@ function Game() {
 
                             setTimeout(() => {
                                 audio.pause();
+                                setTransitionStage(2);
+                                setIsTransitioning(false);
                             }, (endTime - startTime) * 1000);
+                            
+                        } else {
+                            setTransitionStage(2);
+                            setIsTransitioning(false);
                         }
-                    })
+                    });
+                } else {
+                    setTransitionStage(2);
+                    setIsTransitioning(false);
                 }
             } else {
-                console.log('No sound effect for this choice');
+                setTransitionStage(2);
+                setIsTransitioning(false);
             }
         } catch (err) {
         console.error(err);
+        setIsTransitioning(false);
+        setTransitionStage(0);
         }
     };
 
@@ -77,7 +105,12 @@ function Game() {
 
     return (
         <Box background="blackAlpha.900">
-        <Box background={`url('${data?.getStorySegment?.backgroundImage}') no-repeat center center`} w="100vw" h="100vh" display="flex" direction="row" justifyContent="center" alignItems="center">
+        <Box 
+            background={`url('${data?.getStorySegment?.backgroundImage}') no-repeat center center`}
+            w="100vw" h="100vh" display="flex" direction="row" justifyContent="center" alignItems="center"
+            transition="transform 0.5s ease-in-out, opacity 0.5s ease-in-out"
+            transform={transitionStage === 1 ? 'rotateY(180deg)' : 'rotateY(0deg)'}
+            opacity={transitionStage === 1 ? 0 : 1}>
             <Card.Root size="lg" opacity={0.8}>
                 <Card.Body gap={4} backgroundColor="wheat" >
                     <Heading size="2xl">Dungeon Crawler</Heading>
@@ -86,7 +119,7 @@ function Game() {
                         <Text fontSize="md">{data.getStorySegment.text}</Text>
                         <Flex direction="column" gap={4} justifyContent="space-between" mt={4}>
                         {data.getStorySegment.choices.map((choice, index) => (
-                            <Button key={index} w="fit-content" onClick={() => handleChoice(index)}>
+                            <Button key={index} w="fit-content" onClick={() => handleChoice(index)} disabled={isTransitioning}>
                             {choice.text}
                             </Button>
                         ))}
