@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_STORY_SEGMENT, ME } from '../graphql/queries';
 import { CHOOSE_PATH, RESET_GAME } from '../graphql/mutations';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useAuthService } from '../utils/auth';
+import { Box, Card, Button, Flex, Heading, Text } from '@chakra-ui/react';
+import Inventory from '../components/Inventory';
 
-const Game: React.FC = () => {
-    // const navigate = useNavigate();
-    const [segmentId, setSegmentId] = useState(0); 
-    const { loading, error, data } = useQuery<{ getStorySegment: { text: string; choices: { text: string, nextSegmentId: number }[] } }>(GET_STORY_SEGMENT, { variables: { segmentId } });
+function Game() {
+    const [segmentId, setSegmentId] = useState(0);
+    const [isTransitioning, setIsTransitioning] = useState(false);
+    const [transitionStage, setTransitionStage] = useState(0);
+    const [nextSegmentId, setNextSegmentId] = useState<number | null>(null);
+    const { loading, error, data } = useQuery<{ getStorySegment: { text: string; choices: { text: string, nextSegmentId: number, soundEffect: string }[], backgroundImage: string } }>(GET_STORY_SEGMENT, { variables: { segmentId } });
     const { loading: meLoading, error: meError, data: meData } = useQuery(ME);
     const [choosePath] = useMutation(CHOOSE_PATH, { refetchQueries: [{ query: ME }] });
     const [resetGame] = useMutation(RESET_GAME);
+    const navigate = useNavigate();
+    const authService = useAuthService();
 
     useEffect(() => {
         if (meData) {
@@ -18,15 +25,67 @@ const Game: React.FC = () => {
         }
     }, [meData]);
 
+    useEffect(() => {
+        if (transitionStage === 2) {
+            setSegmentId(nextSegmentId as number);
+            setNextSegmentId(null);
+            setTransitionStage(0);
+            setIsTransitioning(false);
+        }
+    }, [transitionStage]);
+
     if (loading || meLoading) return <p>Loading...</p>;
     if (error || meError) return <p>Error: {error?.message || meError?.message}</p>;
 
     const handleChoice = async (choiceIndex: number) => {
         try {
+            setTransitionStage(1);
             const { data: choiceData } = await choosePath({ variables: { segmentId, choiceIndex } });
-            setSegmentId(choiceData.choosePath.segmentId);
+            setNextSegmentId(choiceData.choosePath.segmentId);
+
+            console.log('Current Segment ID:', segmentId);
+            console.log('Next Segment ID:', choiceData.choosePath.segmentId);
+
+            if (data?.getStorySegment.choices[choiceIndex]?.soundEffect) {
+                const soundQuery = data.getStorySegment.choices[choiceIndex].soundEffect;
+                const apiKey = import.meta.env.VITE_FREESOUND_API_KEY;
+
+                if (apiKey) {
+                    await fetch(`https://freesound.org/apiv2/sounds/${soundQuery}?token=${apiKey}`)
+                    .then(response => response.json())
+                    .then((soundData) => {
+                        if (soundData && soundData.previews) {
+                            const soundUrl = soundData.previews['preview-hq-mp3'];
+                            const audio = new Audio(soundUrl);
+                            const startTime = 0;
+                            const endTime = 5;
+
+                            audio.currentTime = startTime;
+                            audio.play();
+
+                            setTimeout(() => {
+                                audio.pause();
+                                setTransitionStage(2);
+                                setIsTransitioning(false);
+                            }, (endTime - startTime) * 1000);
+                            
+                        } else {
+                            setTransitionStage(2);
+                            setIsTransitioning(false);
+                        }
+                    });
+                } else {
+                    setTransitionStage(2);
+                    setIsTransitioning(false);
+                }
+            } else {
+                setTransitionStage(2);
+                setIsTransitioning(false);
+            }
         } catch (err) {
         console.error(err);
+        setIsTransitioning(false);
+        setTransitionStage(0);
         }
     };
 
@@ -39,27 +98,55 @@ const Game: React.FC = () => {
         }
     };
 
+    const handleLogout = () => {
+        authService.logout();
+        navigate('/');
+    };
+
     return (
-        <div>
-        <h1>Dungeon Crawler</h1>
-        {data?.getStorySegment && (
-            <div>
-            <p>{data.getStorySegment.text}</p>
-            {data.getStorySegment.choices.map((choice, index) => (
-                <button key={index} onClick={() => handleChoice(index)}>
-                {choice.text}
-                </button>
-            ))}
-            {meData?.me && (
-                <div>
-                <p>Inventory: {JSON.stringify(meData.me.inventory)}</p>
-                <p>Stats: {JSON.stringify(meData.me.stats)}</p>
-                <button onClick={handleResetGame}>Reset Game</button>
-                </div>
-            )}
-            </div>
-        )}
-        </div>
+        <Box background="blackAlpha.900">
+        <Box 
+            background={`url('${data?.getStorySegment?.backgroundImage}') no-repeat center center`}
+            w="100vw" h="100vh" display="flex" direction="row" justifyContent="center" alignItems="center"
+            transition="transform 0.5s ease-in-out, opacity 0.5s ease-in-out"
+            transform={transitionStage === 1 ? 'rotateY(180deg)' : 'rotateY(0deg)'}
+            opacity={transitionStage === 1 ? 0 : 1}>
+            <Card.Root size="lg" opacity={0.8}>
+                <Card.Body gap={4} backgroundColor="wheat" >
+                    <Heading size="2xl">Dungeon Crawler</Heading>
+                    {data?.getStorySegment && (
+                        <Box maxW="600px">
+                        <Text fontSize="md">{data.getStorySegment.text}</Text>
+                        <Flex direction="column" gap={4} justifyContent="space-between" mt={4}>
+                        {data.getStorySegment.choices.map((choice, index) => (
+                            <Button key={index} w="fit-content" onClick={() => handleChoice(index)} disabled={isTransitioning}>
+                            {choice.text}
+                            </Button>
+                        ))}
+                        </Flex>
+                        {meData?.me && (
+                            <Box display="flex" flexDirection="column" justifyContent="center" gap={4} mt={4}>
+                                <Box display="flex" justifyContent="space-between" gap={4}>
+                                    <Flex direction="column" gap={2} mt={4} w="50%">
+                                    <Inventory inventory={meData?.me?.inventory || []} />
+                                    </Flex>
+                                    <Flex direction="column" gap={2} mt={4} w="50%">
+                                        <Heading size="lg">Stats:</Heading>
+                                        <Text>{JSON.stringify(meData.me.stats)}</Text>
+                                    </Flex>
+                                </Box>
+                                <Flex gap={4}>
+                                    <Button w="fit-content" variant="surface" colorPalette="yellow" onClick={handleResetGame}>Reset Game</Button>
+                                    <Button w="fit-content" variant="surface" colorPalette="red" onClick={handleLogout}>Exit Game</Button>
+                                </Flex>
+                            </Box>
+                        )}
+                        </Box>
+                    )}
+                </Card.Body>
+            </Card.Root>
+        </Box>
+        </Box>
     );
 };
 

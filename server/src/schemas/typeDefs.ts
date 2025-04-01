@@ -7,12 +7,14 @@ const typeDefs = `
     ending: Boolean
     win: Boolean
     loss: Boolean
+    backgroundImage: String
   }
 
   type Choice {
     text: String!
     nextSegmentId: Int!
     effects: Effects
+    soundEffect: String
   }
 
   type Effects {

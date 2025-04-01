@@ -13,8 +13,9 @@ interface Choice {
     nextSegmentId: number | null;
     effects?: {
         inventory?: { [key: string]: number };
-        stats?: { [key: string]: number }
-    }
+        stats?: { [key: string]: number };
+    };
+    soundEffect?: string;
 };
 
 interface IStorySegment {
@@ -25,6 +26,7 @@ interface IStorySegment {
     ending?: boolean;
     win?: boolean;
     loss?: boolean;
+    backgroundImage?: string;
 }
 
 const seedDB = async () => {
@@ -34,7 +36,7 @@ const seedDB = async () => {
         await StorySegment.deleteMany({});
 
         const baseStorySegment: IStorySegment[] = [
-            { // Start
+            {
                 _id: new mongoose.Types.ObjectId(),
                 segmentId: 0,
                 text: 'You wake up in a dark, cold cell. Your head throbs, and you can barely remember anything. What do you do?',
@@ -42,22 +44,26 @@ const seedDB = async () => {
                     {
                         text: 'Feel around the room for anything useful',
                         nextSegmentId: 1,
-                        effects: { inventory: { "Loose Stone": 1 }, stats: { Dexterity: 1 } },
+                        effects: { inventory: { "Sharp Stone": 1 }, stats: { Dexterity: 1 } },
+                        soundEffect: '660335',
                     },
                     {
                         text: 'Try to calm down and wait for your eyes to adjust',
                         nextSegmentId: 2,
                         effects: { stats: { Wisdom: 1 } },
+                        soundEffect: '682879',
                     },
                     {
                         text: 'Panic and start yelling for help!!',
                         nextSegmentId: 3,
                         effects: { stats: { Charm: -1 } },
+                        soundEffect: '351598',
                     }
                 ],
                 ending: false,
                 win: false,
                 loss: false,
+                backgroundImage: '/imgs/prison_cell_closed.webp',
             },
         ];
         const allSegments = baseStorySegment.concat(path1Segments, path2Segments, path3Segments);

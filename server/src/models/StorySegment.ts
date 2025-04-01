@@ -6,7 +6,8 @@ interface Choice {
     effects?: {
         inventory?: { [key: string]: number };
         stats?: { [key: string]: number };
-    };
+    },
+    soundEffect?: string;
 }
 
 interface IStorySegment extends Document {
@@ -17,6 +18,7 @@ interface IStorySegment extends Document {
     ending?: boolean;
     win?: boolean;
     loss?: boolean;
+    backgroundImage?: string;
 }
 
 const storySegmentSchema: Schema = new Schema({
@@ -31,11 +33,14 @@ const storySegmentSchema: Schema = new Schema({
             inventory: { type: Schema.Types.Mixed },
             stats: { type: Schema.Types.Mixed },
         },
+        soundEffect: { type: String },
         },
     ],
     ending: { type: Boolean, default: false },
     win: { type: Boolean, default: false },
     loss: { type: Boolean, default: false },
+    backgroundImage: { type: String },
+    soundEffect: { type: String },
 });
 
 export default mongoose.model<IStorySegment>('StorySegment', storySegmentSchema);

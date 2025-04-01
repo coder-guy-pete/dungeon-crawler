@@ -9,6 +9,7 @@ export const GET_STORY_SEGMENT = gql`
         choices {
             text
             nextSegmentId
+            soundEffect
             effects {
             inventory
             stats
@@ -17,6 +18,7 @@ export const GET_STORY_SEGMENT = gql`
         ending
         win
         loss
+        backgroundImage
         }
     }
 `;
