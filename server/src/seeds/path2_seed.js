@@ -470,7 +470,7 @@ export const path2Segments = [
             {
                 text: "Continue onward, you're almost free!",
                 nextSegmentId: 85,
-                effects: { stats: { Charm: 3 }, win: true },
+                effects: { stats: { Charm: 3 }},
                 soundEffect: '637430',
             },
             {
@@ -481,7 +481,7 @@ export const path2Segments = [
             },
         ],
         ending: false,
-        win: true,
+        win: false,
         loss: false,
         backgroundImage: "./imgs/prisoner_mob.png",
     },
@@ -491,7 +491,7 @@ export const path2Segments = [
         text: "The chaos is intense. You try to slip away, but the guards are closing in. You did not anticipate the level of security in the castle and are ill prepared for a solo escape. Without you leading them, the other prisoners are quickly captured and you are discovered shortly after that. You are dragged back to the cell. Game over.",
         choices: [
             {
-                text: 'End Game.',
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',
@@ -531,16 +531,16 @@ export const path2Segments = [
         text: "You press through the castle gates, overwhelming the guards with your determination and the chaos of the escape. You and a handful of other prisoners make it to the forest beyond the castle walls. You are free. Congratulations, you have escaped the castle!",
         choices: [
             {
-                text: 'End Game.',
+                text: 'You Win!',
                 nextSegmentId: 0,
                 effects: {},
-                soundEffect: '533034',
+                soundEffect: '626259',
             },
         ],
         ending: true,
         win: true,
         loss: false,
-        backgroundImage: "./imgs/game_over.webp",
+        backgroundImage: "./imgs/castle_exit.webp",
     },
     {
         _id: new mongoose.Types.ObjectId(),
@@ -548,16 +548,16 @@ export const path2Segments = [
         text: "You make a run for it, and manage to escape through the guard tower. You find yourself in the forest beyond the castle walls. You are free, but at the cost of leaving abandoning the other prisoners. Congratulations, you have escaped the castle!",
         choices: [
             {
-                text: 'End Game.',
+                text: 'You Win!',
                 nextSegmentId: 0,
                 effects: {},
-                soundEffect: '533034',
+                soundEffect: '626259',
             },
         ],
         ending: true,
         win: true,
         loss: false,
-        backgroundImage: "./imgs/game_over.webp",
+        backgroundImage: "./imgs/castle_exit.webp",
     },
     {
         _id: new mongoose.Types.ObjectId(),
@@ -565,7 +565,7 @@ export const path2Segments = [
         text: "You try to go back and help the other prisoners escape, but the guards have already regrouped and are on high alert. You are quickly captured and dragged back to the cell. Game over.",
         choices: [
             {
-                text: 'End Game.',
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',

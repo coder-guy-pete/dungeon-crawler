@@ -99,7 +99,7 @@ export const path3Segments = [
         text: "You give up hope, resigning yourself to your fate. The next day, the guard returns, dragging you out of the cell. 'Time to meet the king,' he says, a cruel smile on his face. You're taken to the throne room, where the king awaits. 'This is the one who dared to defy me,' the guard says, pushing you to your knees. The king looks down at you, his eyes cold and calculating. 'You will pay for your insolence,' he says. You are executed on the spot. Game over.",
         choices: [
             {
-                text: "End Game",
+                text: "You Lose!",
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',

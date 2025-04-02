@@ -10,17 +10,17 @@ interface InventoryProps {
 
 function Inventory({ inventory }: InventoryProps) {
     const inventoryIcons = {
-        "Master Key": <Icon as={GiSkeletonKey} />,
-        "Sword": <Icon as={GiBroadsword} />,
-        "Leather Shield": <Icon as={GiVikingShield} />,
-        "Coins": <Icon as={PiCoinsBold} />,
-        "Sharp Stone": <Icon as={GiStonePile} />,
-        "Lockpicks": <Icon as={GiLockpicks} />,
+        "Master Key": <Icon as={GiSkeletonKey} color="yellow.800" />,
+        "Sword": <Icon as={GiBroadsword} color="blue.700" />,
+        "Leather Shield": <Icon as={GiVikingShield} color="chocolate" />,
+        "Coins": <Icon as={PiCoinsBold} color="yellow.800" />,
+        "Sharp Stone": <Icon as={GiStonePile} color="gray.600" />,
+        "Lockpicks": <Icon as={GiLockpicks} color="yellow.800" />,
         "Black Powder": <Icon as={GiPowder} />,
-        "Flint and Steel": <Icon as={GiFlintSpark} />,
-        "Metal Bar": <Icon as={GiChopsticks} />,
-        "Guard's Key": <Icon as={GiSkeletonKey} />,
-        "Crude Tools": <Icon as={RiToolsLine} />,
+        "Flint and Steel": <Icon as={GiFlintSpark} color="gray.500" />,
+        "Metal Bar": <Icon as={GiChopsticks} color="gray.700" />,
+        "Guard's Key": <Icon as={GiSkeletonKey} color="yellow.800" />,
+        "Crude Tools": <Icon as={RiToolsLine} color="gray.500" />,
     };
 
     if (!inventory || typeof inventory !== 'object' || Object.keys(inventory).length === 0) {
@@ -34,7 +34,7 @@ function Inventory({ inventory }: InventoryProps) {
     return (
         <Flex direction="column" gap={2}>
             <Heading size="lg">Inventory:</Heading>
-            <Flex direction="column" gap={2}>
+            <Flex direction="row" gap={2} wrap="wrap">
                 {Object.keys(inventory).map((item, index: number) => (
                     <Flex key={index} align="center" gap={2}>
                         {inventoryIcons[item as keyof typeof inventoryIcons] || null}
