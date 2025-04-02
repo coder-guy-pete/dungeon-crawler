@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthService } from '../utils/auth';
 import { Box, Card, Button, Flex, Heading, Text, Spinner } from '@chakra-ui/react';
 import Inventory from '../components/Inventory';
+import Stats from '../components/Stats';
 
 function Game() {
     const [segmentId, setSegmentId] = useState(0);
@@ -95,14 +96,14 @@ function Game() {
             <Card.Root
                 size="lg"
                 width={['90%', '80%', '70%', '60%']}
-                opacity={isHovered ? 0.9 : 0.4}
+                opacity={isHovered ? 0.9 : 0.6}
                 onMouseOver={() => setIsHovered(true)}
                 onMouseOut={() => setIsHovered(false)}
                 tabIndex={0}>
                 <Card.Body gap={4} backgroundColor="wheat" >
                     <Heading size="2xl">Dungeon Crawler</Heading>
                     {data?.getStorySegment && (
-                        <Box maxW="600px">
+                        <Box>
                         <Text fontSize="md">{data.getStorySegment.text}</Text>
                         <Flex direction="column" gap={4} justifyContent="space-between" mt={4}>
                         {data.getStorySegment.choices.map((choice, index) => (
@@ -117,9 +118,8 @@ function Game() {
                                     <Flex direction="column" gap={2} mt={4} w="50%">
                                     <Inventory inventory={meData?.me?.inventory || []} />
                                     </Flex>
-                                    <Flex direction="column" gap={2} mt={4} w="50%">
-                                        <Heading size="lg">Stats:</Heading>
-                                        <Text>{JSON.stringify(meData.me.stats)}</Text>
+                                    <Flex direction="column" gap={2} mt={4}>
+                                        <Stats stats={meData?.me?.stats || []} />
                                     </Flex>
                                 </Box>
                                 <Flex gap={4}>
