@@ -491,7 +491,7 @@ export const path2Segments = [
         text: "The chaos is intense. You try to slip away, but the guards are closing in. You did not anticipate the level of security in the castle and are ill prepared for a solo escape. Without you leading them, the other prisoners are quickly captured and you are discovered shortly after that. You are dragged back to the cell. Game over.",
         choices: [
             {
-                text: 'End Game',
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',
@@ -565,7 +565,7 @@ export const path2Segments = [
         text: "You try to go back and help the other prisoners escape, but the guards have already regrouped and are on high alert. You are quickly captured and dragged back to the cell. Game over.",
         choices: [
             {
-                text: 'End Game',
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',

@@ -4,7 +4,7 @@ import { GET_STORY_SEGMENT, ME } from '../graphql/queries';
 import { CHOOSE_PATH, RESET_GAME } from '../graphql/mutations';
 import { useNavigate } from 'react-router-dom';
 import { useAuthService } from '../utils/auth';
-import { Box, Card, Button, Flex, Heading, Text, Spinner } from '@chakra-ui/react';
+import { Box, Card, Button, Flex, Heading, Text, Spinner, Separator } from '@chakra-ui/react';
 import Inventory from '../components/Inventory';
 import Stats from '../components/Stats';
 
@@ -62,12 +62,18 @@ function Game() {
                                 setIsAudioPlaying(false);
                             }, (endTime - startTime) * 1000);
                             
+                            if (data?.getStorySegment.choices[choiceIndex]?.text === "You Win!" || data?.getStorySegment.choices[choiceIndex]?.text === "You Lose!") {
+                                handleResetGame();;
+                            }
                         }
                     });
                 }
             } else {
                 setSegmentId(choiceData.choosePath.segmentId);
                 setIsAudioPlaying(false);
+                if (data?.getStorySegment.choices[choiceIndex]?.text === "You Win!" || data?.getStorySegment.choices[choiceIndex]?.text === "You Lose!") {
+                    handleResetGame();;
+                }
             }
         } catch (err) {
         console.error(err);
@@ -104,7 +110,7 @@ function Game() {
                     <Heading size="2xl">Dungeon Crawler</Heading>
                     {data?.getStorySegment && (
                         <Box>
-                        <Text fontSize="md">{data.getStorySegment.text}</Text>
+                        <Text fontSize="md"> Path {meData?.me?.currentSegmentId}: {data.getStorySegment.text}</Text>
                         <Flex direction="column" gap={4} justifyContent="space-between" mt={4}>
                         {data.getStorySegment.choices.map((choice, index) => (
                             <Button key={index} w="fit-content" onClick={() => handleChoice(index)} disabled={isAudioPlaying}>
@@ -122,9 +128,16 @@ function Game() {
                                         <Stats stats={meData?.me?.stats || []} />
                                     </Flex>
                                 </Box>
-                                <Flex gap={4}>
-                                    <Button w="fit-content" variant="surface" colorPalette="yellow" onClick={handleResetGame}>Reset Game</Button>
-                                    <Button w="fit-content" variant="surface" colorPalette="red" onClick={handleLogout}>Exit Game</Button>
+                                <Flex gap={4} align="center" justifyContent="space-around" borderTop="dashed 1px" borderColor="blackAlpha.600" pt={4}>
+                                    <Flex gap={4}>
+                                        <Button w="fit-content" variant="surface" colorPalette="yellow" onClick={handleResetGame}>Reset Game</Button>
+                                        <Button w="fit-content" variant="surface" colorPalette="red" onClick={handleLogout}>Log Out</Button>
+                                    </Flex>
+                                    <Flex gap={4} border="solid 1px" borderColor="blackAlpha.600" p={2} borderRadius="md">
+                                        <Text>Wins:{meData?.me?.wins}</Text>
+                                        <Text> | </Text>
+                                        <Text>Losses:{meData?.me?.losses}</Text>
+                                    </Flex>
                                 </Flex>
                             </Box>
                         )}

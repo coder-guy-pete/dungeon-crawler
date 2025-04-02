@@ -341,7 +341,7 @@ export const path1Segments = [
         text: 'You close your eyes, accepting the inevitable. The guard binds your hands and drags you back to your cell. "You should have stayed where you were," he sneers. You are left alone, bruised and defeated, to await your execution. The end.',
         choices: [
             {
-                text: 'End Game',
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',
@@ -358,7 +358,7 @@ export const path1Segments = [
         text: 'With a surge of adrenaline, you lunge at the guard, swinging your sword wildly. He easily sidesteps your attack and delivers a swift merciful blow to your head. You collapse, your vision fading to black. You are dead.',
         choices: [
             {
-                text: "End Game",
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',
@@ -375,7 +375,7 @@ export const path1Segments = [
         text: 'You turn and sprint down the hallway, but the guard quickly shouts an alarm. Within moments, you hear the heavy footsteps of approaching guards. You are surrounded and dragged back to your cell. Your escape attempt has failed. Game over.',
         choices: [
             {
-                text: "End Game",
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',
@@ -415,7 +415,7 @@ export const path1Segments = [
         text: 'You bow your head, bracing for the final blow. The guard, still chuckling, binds your hands and roughly shoves you back towards your cell. "Learn your place," he snarls. You are left alone, defeated and humiliated, awaiting your execution.',
         choices: [
             {
-                text: 'End Game',
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',
@@ -455,7 +455,7 @@ export const path1Segments = [
         text: 'You use the distraction to make a break for it. The guard, still reeling, is unable to stop you. You sprint down the hallway, heart pounding. But your escape is short-lived. You run straight into a group of guards who have been alerted to your presence. You are quickly overpowered and dragged back to your cell. Game over.',
         choices: [
             {
-                text: 'End Game',
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',
@@ -495,7 +495,7 @@ export const path1Segments = [
         text: 'You attempt to drag the guard\'s body into a nearby alcove, but the task proves more difficult than anticipated. While you are struggling, you hear the sound of approaching guards. They discover you hiding the body. You are swiftly captured and dragged back to your cell. Game over.',
         choices: [
             {
-                text: 'End Game',
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',
@@ -581,7 +581,7 @@ export const path1Segments = [
         text: 'You open the door with your master key, but are face to face with a battalion of guards. This was not the path to your freedom, but rather your doom. You\'re dragged all the way back to your cell to await your execution. Game Over.',
         choices: [
             {
-                text: 'End Game',
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',
@@ -822,7 +822,7 @@ export const path1Segments = [
         text: 'Cold, hurt, scared and alone. You realize that you have freed yourself from your captors but at what cost? Instead of a swift death, you wait many days for starvation and disease to take you. What a way to go...Game Over.',
         choices: [
             {
-                text: 'End Game',
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',
@@ -902,7 +902,7 @@ export const path1Segments = [
         text: 'You ready yourself to fight, but as the guard enters the room with his sword brandished you quickly realize that you are no match for him. You are quickly overpowered and dragged back to your cell. Game over.',
         choices: [
             {
-                text: 'End Game',
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',
@@ -965,7 +965,7 @@ export const path1Segments = [
         text: 'You light a spark and run to exit the room, but you gravely underestimated how large the stockpile was. The explosion can be seen from several miles away and causes a large part of the castle to cave in. Burying you and the guards in the dungeon alive. Game Over.',
         choices: [
             {
-                text: 'End Game',
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',
@@ -1068,7 +1068,7 @@ export const path1Segments = [
         text: 'You prepare to fight, but as the guard rounds the corner, you realize that you are no match for him. You are quickly overpowered and dragged back to your cell. Game over.',
         choices: [
             {
-                text: 'End Game',
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',
@@ -1108,7 +1108,7 @@ export const path1Segments = [
         text: 'You burst out of the cell, ready to fight. The guards are taken by surprise, but quickly recover. They swiftly overpower you and drag you back to your cell. You are left alone, defeated and humiliated. Game over.',
         choices: [
             {
-                text: 'End Game',
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',
@@ -1195,7 +1195,7 @@ export const path1Segments = [
         text: 'You wait for the guard to return, but by then it is too late. They have come to escort you to your execution. Game Over.',
         choices: [
             {
-                text: 'End Game',
+                text: 'You Lose!',
                 nextSegmentId: 0,
                 effects: {},
                 soundEffect: '533034',
