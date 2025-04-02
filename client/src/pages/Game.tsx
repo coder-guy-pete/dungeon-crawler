@@ -14,7 +14,14 @@ function Game() {
     const [isHovered, setIsHovered] = useState(false);
     const { loading, error, data } = useQuery<{ getStorySegment: { text: string; choices: { text: string, nextSegmentId: number, soundEffect: string }[], backgroundImage: string } }>(GET_STORY_SEGMENT, { variables: { segmentId } });
     const { loading: meLoading, error: meError, data: meData } = useQuery(ME);
-    const [choosePath] = useMutation(CHOOSE_PATH, { refetchQueries: [{ query: ME }] });
+    const [choosePath] = useMutation(CHOOSE_PATH, { 
+        update: (cache, {data: { choosePath: updatedMe}}) => {
+            cache.writeQuery({
+                query: ME,
+                data: { me: updatedMe },
+            });
+        },
+    });
     const [resetGame] = useMutation(RESET_GAME);
     const navigate = useNavigate();
     const authService = useAuthService();
@@ -26,7 +33,7 @@ function Game() {
     }, [meData]);
 
     if (loading || meLoading) return (
-    <Flex justifyContent="center" alignItems="center" height="100vh">
+    <Flex background="blackAlpha.900" justifyContent="center" alignItems="center" height="100vh">
         <Text>Loading Content...</Text>
         <Spinner size="xl" />
     </Flex>
