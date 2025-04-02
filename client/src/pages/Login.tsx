@@ -25,7 +25,7 @@ function Login() {
 
     return (
         <Flex bg="blackAlpha.900" w="100vw" h="100vh" direction="row" justifyContent="center" alignItems="center">
-            <Image src = "/imgs/torch.gif" alt="Animated Torch" h="200px" />
+            <Image src = "/imgs/torch.gif" alt="Animated Torch" h="200px" hideBelow="md" />
             <Box background="url('/imgs/scroll.png') no-repeat center center" backgroundSize=" 100% 100%" w="100%" maxW="500px" h="auto" minH="600px" display="flex" flexDirection="column" justifyContent="center" alignItems="center" opacity={0.8}>
             <Heading size="4xl" pb={4}>Login</Heading>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -38,7 +38,7 @@ function Login() {
             </form>
             {error && <p>Login failed: {error.message}</p>}
             </Box>
-            <Image src = "/imgs/torch.gif" alt="Animated Torch" h="200px" />
+            <Image src = "/imgs/torch.gif" alt="Animated Torch" h="200px" hideBelow="md" />
         </Flex>
     );
 };
