@@ -4,7 +4,7 @@ import { GET_STORY_SEGMENT, ME } from '../graphql/queries';
 import { CHOOSE_PATH, RESET_GAME } from '../graphql/mutations';
 import { useNavigate } from 'react-router-dom';
 import { useAuthService } from '../utils/auth';
-import { Box, Card, Button, Flex, Heading, Text, Spinner, Highlight } from '@chakra-ui/react';
+import { Box, Card, Button, Flex, Heading, Text, Spinner } from '@chakra-ui/react';
 import Inventory from '../components/Inventory';
 import Stats from '../components/Stats';
 
