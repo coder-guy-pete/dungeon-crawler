@@ -27,7 +27,9 @@
   },
   "homepage": "https://github.com/coder-guy-pete/dungeon-crawler#readme",
   "devDependencies": {
+    "@testing-library/react": "^16.3.0",
     "concurrently": "^9.1.2",
+    "vitest": "^3.1.1",
     "wait-on": "^8.0.3"
   }
 }
