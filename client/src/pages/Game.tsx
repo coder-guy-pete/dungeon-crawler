@@ -120,7 +120,7 @@ function Game() {
                         <Text fontSize="md"> {data.getStorySegment.text}</Text>
                         <Flex direction="column" gap={4} justifyContent="space-between" mt={4}>
                         {data.getStorySegment.choices.map((choice, index) => (
-                            <Button key={index} w="fit-content" onClick={() => handleChoice(index)} disabled={isAudioPlaying}>
+                            <Button key={index} w="fit-content" whiteSpace="normal" onClick={() => handleChoice(index)} disabled={isAudioPlaying}>
                             {choice.text}
                             </Button>
                         ))}
