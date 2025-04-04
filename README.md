@@ -25,6 +25,7 @@
 * **React**: To create the components, logic, and structure of the application
 * **React Icons**: To add icons to the application
 * **React Router**: To handle routing within the application
+* **Apollo Client**: Facilitates GraphQL data fetching and client-side caching for efficient interaction with the backend API.
 * **Chakra UI**: To style the application and more quickly deploy React components
 * **ESLint**: To quickly identify errors during development
 * **GraphQL**: To design and implement APIs
