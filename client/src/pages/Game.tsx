@@ -42,6 +42,9 @@ function Game() {
                 const soundQuery = data.getStorySegment.choices[choiceIndex].soundEffect;
                 const apiKey = import.meta.env.VITE_FREESOUND_API_KEY;
 
+                console.log(typeof apiKey);
+                console.log(!!apiKey)
+                
                 if (apiKey) {
                     setIsAudioPlaying(true);
                     await fetch(`https://freesound.org/apiv2/sounds/${soundQuery}?token=${apiKey}`)
