@@ -96,7 +96,8 @@ function Game() {
 
     return (
         <Box background="blackAlpha.900">
-        <Flex 
+        <Flex
+            data-testid="game-background" 
             background={`url('${data?.getStorySegment?.backgroundImage}') no-repeat center center`}
             w="100vw" h="100vh" direction="column" justifyContent="flex-end" alignItems="center" padding={6}>
             <Card.Root
