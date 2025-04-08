@@ -306,7 +306,7 @@ describe('<Game /> Component Tests', () => {
     );
 
     // Intercept the audio request
-    cy.intercept('GET', 'https://freesound.org/apiv2/sounds/660335?token=*', {
+    cy.intercept('GET', 'https://freesound.org/apiv2/sounds/*?token=*', {
       fixture: 'audio_data.json'
     }).as('getSoundData');
 
@@ -359,7 +359,7 @@ describe('<Game /> Component Tests', () => {
     );
 
     // Intercept the audio request
-    cy.intercept('GET', 'https://freesound.org/apiv2/sounds/660335?token=*', {
+    cy.intercept('GET', 'https://freesound.org/apiv2/sounds/*?token=*', {
       fixture: 'audio_data.json'
     }).as('getSoundData');
 
