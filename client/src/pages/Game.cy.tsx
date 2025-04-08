@@ -301,13 +301,15 @@ describe('<Game /> Component Tests', () => {
     }).as('getSoundData');
 
     // Stub the Audio constructor and its play method
-    cy.window().then((win) => {
-      cy.stub(win, 'Audio').returns({
-        play: cy.stub().as('audioPlay'),
-        pause: cy.stub().as('audioPause'),
-        currentTime: 0,
-      });
-    });
+    cy.stub(HTMLAudioElement.prototype, 'play').as('audioPlay');
+    // cy.stub(HTMLAudioElement.prototype, 'pause').as('audioPause');
+    // cy.window().then((win) => {
+    //   cy.stub(win, 'Audio').returns({
+    //     play: cy.stub().as('audioPlay'),
+    //     // pause: cy.stub().as('audioPause'),
+    //     // currentTime: 0,
+    //   });
+    // });
 
     mount(
       <MockedProvider mocks={nextSegmentMocks} addTypename={true}>
