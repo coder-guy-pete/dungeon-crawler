@@ -13,6 +13,12 @@ jobs:
       steps:
         - uses: actions/checkout@v3
 
+        - name: Test
+          run: |
+            echo "Running tests..."
+            npm run test
+            echo "Tests completed."
+
         - name: Deploy
           if: github.ref == 'refs/heads/main'
           env:

@@ -372,15 +372,27 @@ describe('<Game /> Component Tests', () => {
         </MockedProvider>
     );
 
+    // Intercept the audio request
+    cy.intercept('GET', 'https://freesound.org/apiv2/sounds/660335?token=*', {
+      fixture: 'audio_data.json'
+    }).as('getSoundData');
+
+    // Stub the Audio constructor and its play method
+    cy.window().then((win) => {
+      cy.stub(win, 'Audio').returns({
+        play: cy.stub().as('audioPlay'),
+        pause: cy.stub().as('audioPause'),
+        currentTime: 0,
+      });
+    });
+
     // Initial segment loads and user selects an option
     cy.get('p').contains('You wake up in a dark, cold cell. Your head throbs, and you can barely remember anything. What do you do?').should('exist');
     cy.get('button').contains('Feel around the room for anything useful').click();
-    cy.wait(500);
 
     // Next segment loads and user selects an option
     cy.get('p').contains('You find a loose stone on the floor. It\'s surprisingly sharp.').should('exist');
     cy.get('button').contains('Examine the stone more closely').click();
-    cy.wait(600);
 
     // Ending segment loads and user has lost
     cy.get('p').contains('The lock is too tough. You\'ve been caught!').should('exist');
