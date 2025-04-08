@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/coder-guy-pete/dungeon-crawler#readme",
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "concurrently": "^9.1.2",
     "wait-on": "^8.0.3"
   }
