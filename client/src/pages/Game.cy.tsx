@@ -295,16 +295,6 @@ describe('<Game /> Component Tests', () => {
       getStorySegmentMock_Segment1,
     ];
 
-    mount(
-      <MockedProvider mocks={nextSegmentMocks} addTypename={true}>
-        <MemoryRouter>
-          <Provider>
-            <Game />
-          </Provider>
-          </MemoryRouter>
-        </MockedProvider>
-    );
-
     // Intercept the audio request
     cy.intercept('GET', 'https://freesound.org/apiv2/sounds/*?token=*', {
       fixture: 'audio_data.json'
@@ -318,6 +308,16 @@ describe('<Game /> Component Tests', () => {
         currentTime: 0,
       });
     });
+
+    mount(
+      <MockedProvider mocks={nextSegmentMocks} addTypename={true}>
+        <MemoryRouter>
+          <Provider>
+            <Game />
+          </Provider>
+          </MemoryRouter>
+        </MockedProvider>
+    );
 
     // Click the first choice button to go to the next segment
     cy.get('button').contains('Feel around the room for anything useful').click();
