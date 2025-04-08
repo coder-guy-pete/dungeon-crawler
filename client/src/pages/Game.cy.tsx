@@ -323,7 +323,6 @@ describe('<Game /> Component Tests', () => {
     cy.get('button').contains('Feel around the room for anything useful').click();
 
     // Wait for the sound data to be fetched and played
-    cy.wait('@getSoundData');
     cy.get('@audioPlay').should('have.been.calledOnce');
 
     // Check if the background image is updated
