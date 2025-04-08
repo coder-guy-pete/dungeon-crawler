@@ -5,7 +5,7 @@ import { MockedProvider } from '@apollo/client/testing'
 import { MemoryRouter } from 'react-router-dom'
 import { Provider } from '../components/ui/provider'
 import { ME, GET_STORY_SEGMENT } from '../graphql/queries'
-import { CHOOSE_PATH, RESET_GAME } from '../graphql/mutations'
+import { CHOOSE_PATH } from '../graphql/mutations'
 
 const meQueryMockInitial = {
   request: {
