@@ -248,19 +248,6 @@ const choosePathMock_Segment1 = {
   }
 };
 
-const resetGameMock = {
-  request: {
-    query: RESET_GAME
-  },
-  result: {
-    data: {
-      resetGame: {
-        __typename: 'User'
-      }
-    }
-  }
-};
-
 const initialRenderMocks = [
   meQueryMockInitial,
   getStorySegmentMock_Segment0
