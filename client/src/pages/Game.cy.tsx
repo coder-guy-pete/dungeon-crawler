@@ -50,7 +50,7 @@ const meQueryMock_Segment1 = {
         email: 'test@email.com',
         inventory: {
           "Loose Stone": 1,
-          "Sharp Stone": 1
+          "Sharp Stone": 1,
         },
         stats: {
           "HP": 50,
@@ -63,6 +63,27 @@ const meQueryMock_Segment1 = {
         wins: 0,
         losses: 12,
         currentSegmentId: 1
+      },
+    },
+  },
+};
+
+const meQueryMock_Segment2_Lose = {
+  request: {
+    query: ME,
+  },
+  result: {
+    data: {
+      me: {
+        __typename: 'User',
+        id: 'testUserId',
+        username: 'testuser',
+        email: 'test@email.com',
+        inventory: { "Item1": 1, "Item2": 1 },
+        stats: { "Stat1": 1, "Stat2": 1 },
+        wins: 0,
+        losses: 0,
+        currentSegmentId: 2
       },
     },
   },
@@ -149,7 +170,7 @@ const getStorySegmentMock_Segment1 = {
         choices: [
           {
             __typename: 'Choice',
-            nextSegmentId: 4,
+            nextSegmentId: 2,
             text: "Examine the stone more closely",
             effects: {
               __typename: 'Effects',
@@ -168,7 +189,30 @@ const getStorySegmentMock_Segment1 = {
   },
 };
 
-const choosePathMock = {
+const getStorySegmentMock_Segment2_Lose = {
+  request: {
+    query: GET_STORY_SEGMENT,
+    variables: {
+      segmentId: 2
+    },
+  },
+  result: {
+    data: {
+      getStorySegment: {
+        __typename: 'StorySegment',
+        segmentId: 2,
+        text: "The lock is too tough. You've been caught!",
+        choices: [],
+        ending: true,
+        win: false,
+        loss: true,
+        backgroundImage: "/imgs/caught.webp"
+      },
+    },
+  },
+};
+
+const choosePathMock_Segment0 = {
   request: {
     query: CHOOSE_PATH,
     variables: {
@@ -181,6 +225,24 @@ const choosePathMock = {
       choosePath: {
         __typename: 'User',
         segmentId: 1
+      }
+    }
+  }
+};
+
+const choosePathMock_Segment1 = {
+  request: {
+    query: CHOOSE_PATH,
+    variables: {
+      segmentId: 1,
+      choiceIndex: 0
+    }
+  },
+  result: {
+    data: {
+      choosePath: {
+        __typename: 'User',
+        segmentId: 2
       }
     }
   }
@@ -241,7 +303,7 @@ describe('<Game /> Component Tests', () => {
     const nextSegmentMocks = [
       meQueryMockInitial,
       getStorySegmentMock_Segment0,
-      choosePathMock,
+      choosePathMock_Segment0,
       meQueryMock_Segment1,
       getStorySegmentMock_Segment1,
     ];
@@ -286,5 +348,41 @@ describe('<Game /> Component Tests', () => {
     // Check if inventory and stats are updated
     cy.get('p').contains('Sharp Stone (1)').should('exist');
     cy.get('p').contains('Dexterity (11)').should('exist');
+  })
+
+  it('should navigate through segments and end with "You Lose!"', () => {
+    const endingMocks = [
+      meQueryMockInitial,
+      getStorySegmentMock_Segment0,
+      choosePathMock_Segment0,
+      meQueryMock_Segment1,
+      getStorySegmentMock_Segment1,
+      choosePathMock_Segment1,
+      meQueryMock_Segment2_Lose,
+      getStorySegmentMock_Segment2_Lose,
+    ];
+
+    mount(
+      <MockedProvider mocks={endingMocks} addTypename={true}>
+        <MemoryRouter>
+          <Provider>
+            <Game />
+          </Provider>
+          </MemoryRouter>
+        </MockedProvider>
+    );
+
+    // Initial segment loads and user selects an option
+    cy.get('p').contains('You wake up in a dark, cold cell. Your head throbs, and you can barely remember anything. What do you do?').should('exist');
+    cy.get('button').contains('Feel around the room for anything useful').click();
+    cy.wait(500);
+
+    // Next segment loads and user selects an option
+    cy.get('p').contains('You find a loose stone on the floor. It\'s surprisingly sharp.').should('exist');
+    cy.get('button').contains('Examine the stone more closely').click();
+    cy.wait(600);
+
+    // Ending segment loads and user has lost
+    cy.get('p').contains('The lock is too tough. You\'ve been caught!').should('exist');
   })
 })
