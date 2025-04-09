@@ -10,8 +10,6 @@ on:
 jobs:
     ci:
       runs-on: ubuntu-latest
-      env:
-        VITE_FREESOUND_API_KEY: ${{ secrets.VITE_FREESOUND_API_KEY }}
       steps:
         - uses: actions/checkout@v3
 

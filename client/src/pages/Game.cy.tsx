@@ -4,7 +4,7 @@ import { mount } from 'cypress/react'
 import { MockedProvider } from '@apollo/client/testing'
 import { MemoryRouter } from 'react-router-dom'
 import { Provider } from '../components/ui/provider'
-import { ME, GET_STORY_SEGMENT } from '../graphql/queries'
+import { ME, GET_STORY_SEGMENT, GET_SOUND } from '../graphql/queries'
 import { CHOOSE_PATH } from '../graphql/mutations'
 
 const meQueryMockInitial = {
@@ -248,6 +248,74 @@ const choosePathMock_Segment1 = {
   }
 };
 
+const getSoundMock_Segment0_Choice0 = {
+  request: {
+    query: GET_SOUND,
+    variables: {
+      soundQuery: "660335"
+    },
+  },
+  result: {
+    data: {
+      getSound: {
+        __typename: 'Sound',
+        url: 'https://example.com/audio/scuffing.mp3'
+      },
+    },
+  },
+};
+
+const getSoundMock_Segment0_Choice1 = {
+  request: {
+    query: GET_SOUND,
+    variables: {
+      soundQuery: "682879"
+    },
+  },
+  result: {
+    data: {
+      getSound: {
+        __typename: 'Sound',
+        url: 'https://example.com/audio/calm.mp3'
+      },
+    },
+  },
+};
+
+const getSoundMock_Segment0_Choice2 = {
+  request: {
+    query: GET_SOUND,
+    variables: {
+      soundQuery: "351598"
+    },
+  },
+  result: {
+    data: {
+      getSound: {
+        __typename: 'Sound',
+        url: 'https://example.com/audio/panic.mp3'
+      },
+    },
+  },
+};
+
+const getSoundMock_Segment1_Choice0 = {
+  request: {
+    query: GET_SOUND,
+    variables: {
+      soundQuery: "123456"
+    },
+  },
+  result: {
+    data: {
+      getSound: {
+        __typename: 'Sound',
+        url: 'https://example.com/audio/examine.mp3'
+      },
+    },
+  },
+};
+
 const initialRenderMocks = [
   meQueryMockInitial,
   getStorySegmentMock_Segment0
@@ -293,23 +361,18 @@ describe('<Game /> Component Tests', () => {
       choosePathMock_Segment0,
       meQueryMock_Segment1,
       getStorySegmentMock_Segment1,
+      getSoundMock_Segment0_Choice0,
     ];
 
     // Intercept the audio request
-    cy.intercept('GET', 'https://freesound.org/apiv2/sounds/*?token=*', {
-      fixture: 'audio_data.json'
-    }).as('getSoundData');
+    cy.intercept('GET', '/graphql', (req) => {
+      if (req.body.operationName === 'getSound' && req.body.variables.soundQuery === '*') {
+        req.reply({ data: getSoundMock_Segment0_Choice0.result.data });
+      }
+    }).as('soundData');
 
     // Stub the Audio constructor and its play method
     cy.stub(HTMLAudioElement.prototype, 'play').as('audioPlay');
-    // cy.stub(HTMLAudioElement.prototype, 'pause').as('audioPause');
-    // cy.window().then((win) => {
-    //   cy.stub(win, 'Audio').returns({
-    //     play: cy.stub().as('audioPlay'),
-    //     // pause: cy.stub().as('audioPause'),
-    //     // currentTime: 0,
-    //   });
-    // });
 
     mount(
       <MockedProvider mocks={nextSegmentMocks} addTypename={true}>
@@ -348,6 +411,8 @@ describe('<Game /> Component Tests', () => {
       choosePathMock_Segment1,
       meQueryMock_Segment2_Lose,
       getStorySegmentMock_Segment2_Lose,
+      getSoundMock_Segment0_Choice0,
+      getSoundMock_Segment1_Choice0,
     ];
 
     mount(
@@ -361,18 +426,14 @@ describe('<Game /> Component Tests', () => {
     );
 
     // Intercept the audio request
-    cy.intercept('GET', 'https://freesound.org/apiv2/sounds/*?token=*', {
-      fixture: 'audio_data.json'
-    }).as('getSoundData');
+    cy.intercept('GET', '/graphql', (req) => {
+      if (req.body.operationName === 'getSound' && req.body.variables.soundQuery === '*') {
+        req.reply({ data: getSoundMock_Segment0_Choice0.result.data });
+      }
+    }).as('soundData');
 
     // Stub the Audio constructor and its play method
-    cy.window().then((win) => {
-      cy.stub(win, 'Audio').returns({
-        play: cy.stub().as('audioPlay'),
-        pause: cy.stub().as('audioPause'),
-        currentTime: 0,
-      });
-    });
+    cy.stub(HTMLAudioElement.prototype, 'play').as('audioPlay');
 
     // Initial segment loads and user selects an option
     cy.get('p').contains('You wake up in a dark, cold cell. Your head throbs, and you can barely remember anything. What do you do?').should('exist');
