@@ -265,40 +265,6 @@ const getSoundMock_Segment0_Choice0 = {
   },
 };
 
-const getSoundMock_Segment0_Choice1 = {
-  request: {
-    query: GET_SOUND,
-    variables: {
-      soundQuery: "682879"
-    },
-  },
-  result: {
-    data: {
-      getSound: {
-        __typename: 'Sound',
-        url: 'https://example.com/audio/calm.mp3'
-      },
-    },
-  },
-};
-
-const getSoundMock_Segment0_Choice2 = {
-  request: {
-    query: GET_SOUND,
-    variables: {
-      soundQuery: "351598"
-    },
-  },
-  result: {
-    data: {
-      getSound: {
-        __typename: 'Sound',
-        url: 'https://example.com/audio/panic.mp3'
-      },
-    },
-  },
-};
-
 const getSoundMock_Segment1_Choice0 = {
   request: {
     query: GET_SOUND,
