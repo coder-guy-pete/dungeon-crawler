@@ -40,7 +40,7 @@ function Game() {
 
             if (data?.getStorySegment.choices[choiceIndex]?.soundEffect) {
                 const soundQuery = data.getStorySegment.choices[choiceIndex].soundEffect;
-                const apiKey = import.meta.env.VITE_FREESOUND_API_KEY || 'test';
+                const apiKey = import.meta.env.VITE_FREESOUND_API_KEY;
 
                 if (apiKey) {
                     setIsAudioPlaying(true);
