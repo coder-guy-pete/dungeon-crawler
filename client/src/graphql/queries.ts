@@ -37,3 +37,11 @@ export const ME = gql`
         }
     }
 `;
+
+export const GET_SOUND = gql`
+    query GetSound($soundQuery: String!) {
+        getSound(soundQuery: $soundQuery) {
+        url
+        }
+    }
+`;

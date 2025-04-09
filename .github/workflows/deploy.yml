@@ -13,6 +13,23 @@ jobs:
       steps:
         - uses: actions/checkout@v3
 
+        - name: Use Node.js 22.x
+          uses: actions/setup-node@v3
+          with:
+            node-version: 22.x
+
+        - name: Install dependencies
+          run: npm install
+
+        - name: Run Build
+          run: npm run build
+
+        - name: Run Tests
+          run: |
+            echo "Running tests..."
+            npm run test
+            echo "Tests completed."
+
         - name: Deploy
           if: github.ref == 'refs/heads/main'
           env:

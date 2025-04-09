@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { GET_STORY_SEGMENT, ME } from '../graphql/queries';
+import { GET_STORY_SEGMENT, ME, GET_SOUND } from '../graphql/queries';
 import { CHOOSE_PATH, RESET_GAME } from '../graphql/mutations';
 import { useNavigate } from 'react-router-dom';
 import { useAuthService } from '../utils/auth';
@@ -14,14 +14,8 @@ function Game() {
     const [isHovered, setIsHovered] = useState(false);
     const { loading, error, data } = useQuery<{ getStorySegment: { text: string; choices: { text: string, nextSegmentId: number, soundEffect: string }[], backgroundImage: string } }>(GET_STORY_SEGMENT, { variables: { segmentId } });
     const { loading: meLoading, error: meError, data: meData } = useQuery(ME);
-    const [choosePath] = useMutation(CHOOSE_PATH, { 
-        update: (cache, {data: { choosePath: updatedMe}}) => {
-            cache.writeQuery({
-                query: ME,
-                data: { me: updatedMe },
-            });
-        },
-    });
+    const { loading: soundLoading, error: soundError, refetch: getSoundUrl } = useQuery(GET_SOUND, { variables: { soundQuery: null }, skip: true });
+    const [choosePath] = useMutation(CHOOSE_PATH, { refetchQueries: [{ query: ME }] });
     const [resetGame] = useMutation(RESET_GAME);
     const navigate = useNavigate();
     const authService = useAuthService();
@@ -32,48 +26,42 @@ function Game() {
         }
     }, [meData]);
 
-    if (loading || meLoading) return (
+    if (loading || meLoading || soundLoading) return (
     <Flex background="blackAlpha.900" justifyContent="center" alignItems="center" height="100vh">
         <Text>Loading Content...</Text>
         <Spinner size="xl" />
     </Flex>
     );
     
-    if (error || meError) return <p>Error: {error?.message || meError?.message}</p>;
+    if (error || meError || soundError) return <p>Error: {error?.message || meError?.message || soundError?.message}</p>;
 
     const handleChoice = async (choiceIndex: number) => {
         try {
             const { data: choiceData } = await choosePath({ variables: { segmentId, choiceIndex } });
+            const soundEffect = data?.getStorySegment.choices[choiceIndex]?.soundEffect;
+            console.log("Sound Effect: ", soundEffect);
 
-            if (data?.getStorySegment.choices[choiceIndex]?.soundEffect) {
-                const soundQuery = data.getStorySegment.choices[choiceIndex].soundEffect;
-                const apiKey = import.meta.env.VITE_FREESOUND_API_KEY;
+            if (soundEffect) {
+                setIsAudioPlaying(true);
+                const { data: fetchedSoundData } = await getSoundUrl({ soundQuery: soundEffect });
+                console.log("Fetched Sound Data: ", fetchedSoundData);
 
-                if (apiKey) {
-                    setIsAudioPlaying(true);
-                    await fetch(`https://freesound.org/apiv2/sounds/${soundQuery}?token=${apiKey}`)
-                    .then(response => response.json())
-                    .then((soundData) => {
-                        if (soundData && soundData.previews) {
-                            const soundUrl = soundData.previews['preview-hq-mp3'];
-                            const audio = new Audio(soundUrl);
-                            const startTime = 0;
-                            const endTime = 4;
+                if (fetchedSoundData) {
+                    const audio = new Audio(fetchedSoundData.getSound.url);
+                    const startTime = 0;
+                    const endTime = 4;
 
-                            audio.currentTime = startTime;
-                            audio.play();
+                    audio.currentTime = startTime;
+                    audio.play();
 
-                            setTimeout(() => {
-                                audio.pause();
-                                setSegmentId(choiceData.choosePath.segmentId);
-                                setIsAudioPlaying(false);
-                            }, (endTime - startTime) * 1000);
-                            
-                            if (data?.getStorySegment.choices[choiceIndex]?.text === "You Win!" || data?.getStorySegment.choices[choiceIndex]?.text === "You Lose!") {
-                                handleResetGame();;
-                            }
-                        }
-                    });
+                    setTimeout(() => {
+                        audio.pause();
+                        setSegmentId(choiceData.choosePath.segmentId);
+                        setIsAudioPlaying(false);
+                    }, (endTime - startTime) * 1000);
+                    if (data?.getStorySegment.choices[choiceIndex]?.text === "You Win!" || data?.getStorySegment.choices[choiceIndex]?.text === "You Lose!") {
+                        handleResetGame();;
+                    }
                 }
             } else {
                 setSegmentId(choiceData.choosePath.segmentId);
@@ -103,7 +91,8 @@ function Game() {
 
     return (
         <Box background="blackAlpha.900">
-        <Flex 
+        <Flex
+            data-testid="game-background" 
             background={`url('${data?.getStorySegment?.backgroundImage}') no-repeat center center`}
             w="100vw" h="100vh" direction="column" justifyContent="flex-end" alignItems="center" padding={6}>
             <Card.Root
