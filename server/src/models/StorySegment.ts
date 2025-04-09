@@ -41,6 +41,8 @@ const storySegmentSchema: Schema = new Schema({
     loss: { type: Boolean, default: false },
     backgroundImage: { type: String },
     soundEffect: { type: String },
+}, {
+    collection: 'dungeonCrawler'
 });
 
 export default mongoose.model<IStorySegment>('StorySegment', storySegmentSchema);

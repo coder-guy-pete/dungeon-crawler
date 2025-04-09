@@ -22,6 +22,8 @@ const userSchema = new Schema<IUser>({
     wins: { type: Number, default: 0 },
     losses: { type: Number, default: 0 },
     currentSegmentId: { type: Number, default: 0 },
+}, {
+    collection: 'dungeonCrawler'
 });
 
 userSchema.pre<IUser>('save', async function (next) {
