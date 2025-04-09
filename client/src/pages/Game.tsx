@@ -14,7 +14,7 @@ function Game() {
     const [isHovered, setIsHovered] = useState(false);
     const { loading, error, data } = useQuery<{ getStorySegment: { text: string; choices: { text: string, nextSegmentId: number, soundEffect: string }[], backgroundImage: string } }>(GET_STORY_SEGMENT, { variables: { segmentId } });
     const { loading: meLoading, error: meError, data: meData } = useQuery(ME);
-    const { data: soundData, loading: soundLoading, error: soundError, refetch: getSoundUrl } = useQuery(GET_SOUND, { variables: { soundQuery: null }, skip: true });
+    const { loading: soundLoading, error: soundError, refetch: getSoundUrl } = useQuery(GET_SOUND, { variables: { soundQuery: null }, skip: true });
     const [choosePath] = useMutation(CHOOSE_PATH, { refetchQueries: [{ query: ME }] });
     const [resetGame] = useMutation(RESET_GAME);
     const navigate = useNavigate();
