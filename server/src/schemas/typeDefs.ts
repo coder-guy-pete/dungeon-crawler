@@ -40,6 +40,10 @@ const typeDefs = `
     password: String!
   }
 
+  type Sound {
+    url: String
+  }
+
   type Auth {
     token: String!
     user: User!
@@ -50,6 +54,7 @@ const typeDefs = `
   type Query {
     getStorySegment(segmentId: Int!): StorySegment
     me: User
+    getSound(soundQuery: String!): Sound
   }
 
   type Mutation {

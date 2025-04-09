@@ -48,6 +48,25 @@ const resolvers = {
     getStorySegment: async (_parent: any, { segmentId }: StorySegmentArgs) => {
       return StorySegment.findOne({ segmentId });
     },
+    getSound: async (_parent: any, { soundQuery }: { soundQuery: string }) => {
+      const apiKey = process.env.FREESOUND_API_KEY;
+      if (!apiKey) {
+        console.error('Freesound API key not configured on the server.');
+        return null;
+      }
+
+      try {
+        const response = await fetch(`https://freesound.org/apiv2/sounds/${soundQuery}/?token=${apiKey}`);
+        const soundData = await response.json();
+        if (soundData && soundData.previews) {
+          return { url: soundData.previews['preview-hq-mp3'] };
+        }
+        return null;
+      } catch (error) {
+        console.error('Error fetching sound:', error);
+        return null;
+      }
+    },
   },
   Mutation: {
     createUser: async (_parent: any, { input }: CreateUserArgs) => {
