@@ -3,7 +3,7 @@ import { Box, Flex, Button, Heading, Text } from "@chakra-ui/react";
 
 function Home() {
     return (
-        <Box backgroundImage="url('/imgs/dungeon_entrance.webp')" backgroundSize="contain" backgroundPosition="center" w="100vw" h="100vh" display="flex" justifyContent="center" alignItems="center">
+        <Box background="url('/imgs/dungeon_entrance.webp') no-repeat center center" backgroundSize="contain" backgroundPosition="center" w="100vw" h="100vh" display="flex" justifyContent="center" alignItems="center">
             <Box display="flex" justifyContent="center" w={{base: "80%", smToMd: "80%", mdTo2xl: "50%" }} bg="gray" borderRadius={8} opacity={0.8} borderColor="black" borderWidth={2} borderStyle="groove" boxShadow="2xl">
                 <Flex direction="column" justify="center" gap={4} align="center" p={4}>
                     <Heading size={{base: "xl", smToMd: "2xl", mdTo2xl: "4xl"}}>Welcome to Dungeon Crawler!</Heading>
